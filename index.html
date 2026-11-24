@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-cursor-mode="default">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATHARVA AGRAWAL // Autonomous AI · Cyber Defense · Innovation Engine</title>
+    <meta name="description" content="Next-gen interactive portfolio of Atharva Agrawal. High school innovator at Brighton International School, Google AI & Cybersecurity certified, 4th World Teen Parliament influencer.">
+    <meta name="theme-color" content="#030712">
+
+    <!-- Preconnect & DNS-Prefetch for Blazing Fast Load -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Pro/Free CDN & Lucide Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="assets/css/port2.css">
+</head>
+<body class="noise-overlay">
+
+    <!-- Interactive Custom Magnetic Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-ring" id="cursor-ring">
+        <span class="cursor-label" id="cursor-label">VIEW</span>
+    </div>
+
+    <!-- WebGL / Canvas Background Grid & Kinetic Particles -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Sound Toggle / Ambient Audio FX Simulation -->
+    <div class="hud-top-bar">
+        <div class="hud-item telemetry">
+            <span class="hud-pulse"></span>
+            <span class="hud-text">STATUS: <strong class="text-neon">SYSTEM_ONLINE</strong></span>
+            <span class="hud-sep">//</span>
+            <span class="hud-text">LOC: <strong id="user-location">RAIPUR, CG [21.2514° N, 81.6296° E]</strong></span>
+            <span class="hud-sep">//</span>
+            <span class="hud-text">TIME: <strong id="live-time">00:00:00 UTC</strong></span>
+        </div>
+        <div class="hud-item actions">
+            <button class="sound-toggle-btn" id="sound-btn" title="Toggle Sound Feedback">
+                <i class="fas fa-volume-up" id="sound-icon"></i>
+                <span class="btn-caption">AUDIO FX</span>
+            </button>
+            <a href="admin/index.html" class="sound-toggle-btn" title="Secure Admin Panel">
+                <i class="fas fa-lock"></i>
+                <span class="btn-caption">ADMIN</span>
+            </a>
+            <button class="terminal-trigger-btn" id="terminal-trigger" title="Open Matrix CLI Terminal">
+                <i class="fas fa-terminal"></i>
+                <span class="btn-caption">CLI TERMINAL [~]</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating Dynamic Island Floating Nav -->
+    <header class="floating-island" id="island-nav">
+        <a href="#hero" class="island-brand">
+            <span class="brand-monogram">AA</span>
+            <span class="brand-name">atharva<span class="dot">.</span>ai</span>
+        </a>
+        <nav class="island-links">
+            <a href="#matrix-bento" class="island-link active" data-nav="bento"><i class="fas fa-th-large"></i><span>Bento Matrix</span></a>
+            <a href="#intel" class="island-link" data-nav="intel"><i class="fas fa-fingerprint"></i><span>Intel & Bio</span></a>
+            <a href="#vault" class="island-link" data-nav="vault"><i class="fas fa-shield-alt"></i><span>Cert Vault</span></a>
+            <a href="#projects" class="island-link" data-nav="projects"><i class="fas fa-laptop-code"></i><span>Prototypes</span></a>
+            <a href="#arena" class="island-link" data-nav="arena"><i class="fas fa-trophy"></i><span>Arena</span></a>
+            <a href="#uplink" class="island-link" data-nav="uplink"><i class="fas fa-satellite-dish"></i><span>Uplink</span></a>
+        </nav>
+        <div class="island-actions">
+            <a href="#uplink" class="island-cta">
+                <span>CONNECT</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </header>
+
+    <main id="smooth-wrapper">
+
+        <!-- ================= SECTION 1: KINETIC HERO ================= -->
+        <section class="section hero-kinetic" id="hero">
+            <div class="hero-container">
+                <div class="hero-header-badge">
+                    <div class="radar-ping"></div>
+                    <span>NEXT-GEN AUTONOMOUS INNOVATOR & STUDENT RESEARCHER</span>
+                </div>
+
+                <div class="hero-typography-stage">
+                    <h1 class="hero-glitch-title" data-text="ATHARVA AGRAWAL">
+                        <span class="hero-row">ATHARVA</span>
+                        <span class="hero-row outline-text">AGRAWAL</span>
+                    </h1>
+                </div>
+
+                <div class="hero-marquee-ticker">
+                    <div class="marquee-track">
+                        <span>AI ARCHITECT // GOOGLE CYBERSECURITY CERTIFIED // 4TH WORLD TEEN PARLIAMENT INFLUENCER // IIT BOMBAY EUREKA! JR // IIM INDORE PI QUIZ // VVM NATIONAL LEVEL-I // BRIGHTON INTERNATIONAL SCHOOL // FULL-STACK WEB ENGINEER // ETHICAL AI RESEARCH //</span>
+                        <span>AI ARCHITECT // GOOGLE CYBERSECURITY CERTIFIED // 4TH WORLD TEEN PARLIAMENT INFLUENCER // IIT BOMBAY EUREKA! JR // IIM INDORE PI QUIZ // VVM NATIONAL LEVEL-I // BRIGHTON INTERNATIONAL SCHOOL // FULL-STACK WEB ENGINEER // ETHICAL AI RESEARCH //</span>
+                    </div>
+                </div>
+
+                <!-- Hero Interactive Cyber Widget Bar -->
+                <div class="hero-subgrid">
+                    <div class="hero-manifesto">
+                        <div class="manifesto-tag">IDENTITY VECTOR</div>
+                        <p>
+                            Secondary student innovator exploring the synthesis of <strong>Large Language Model architectures</strong>, <strong>enterprise cybersecurity resilience</strong>, and <strong>humanitarian technological policy</strong>. Operating out of Brighton International School, Raipur.
+                        </p>
+                        <div class="manifesto-badges">
+                            <span class="m-badge"><i class="fas fa-check-circle"></i> 24+ Accredited Diplomas</span>
+                            <span class="m-badge"><i class="fas fa-award"></i> 11+ National Podiums</span>
+                            <span class="m-badge"><i class="fas fa-code-branch"></i> Level-I NCERT VVM Selection</span>
+                        </div>
+                    </div>
+
+                    <div class="hero-interactive-card" id="tilt-avatar-card">
+                        <div class="avatar-holo-ring"></div>
+                        <div class="avatar-frame">
+                            <img src="assets/img/profile.jpg" alt="Atharva Agrawal" class="avatar-holo-img">
+                            <div class="avatar-scanline"></div>
+                        </div>
+                        <div class="avatar-meta-tag">
+                            <span class="status-indicator"></span>
+                            <span>AGENT_ID: ATHARVA_08 // ACTIVE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 2: BENTO MATRIX ================= -->
+        <section class="section bento-matrix" id="matrix-bento">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <div class="title-meta">01 // COMMAND_CENTER</div>
+                    <h2 class="section-heading">THE BENTO <span class="gradient-span">CAPABILITY MATRIX</span></h2>
+                    <p class="section-lead">A modular command center summarizing real-time metrics, tech stacks, live AI sandbox, and core competencies.</p>
+                </div>
+
+                <div class="bento-grid-stage">
+                    
+                    <!-- Bento Card 1: Live Interactive Prompt AI Agent -->
+                    <div class="bento-card bento-col-2 bento-ai-playground" data-tilt>
+                        <div class="card-glow"></div>
+                        <div class="card-topline">
+                            <div class="tag-chip"><i class="fas fa-microchip"></i> AI PROMPT SANDBOX</div>
+                            <span class="chip-status">RUNNING_LLM_V4</span>
+                        </div>
+                        <h3 class="bento-title">Ask Atharva's Digital Twin</h3>
+                        <p class="bento-desc">Type an inquiry below to query my research areas, credentials, or projects instantly:</p>
+                        <div class="ai-mock-terminal">
+                            <div class="ai-msg-history" id="ai-messages">
+                                <div class="ai-msg bot">
+                                    <span class="sender">AtharvaBot:</span>
+                                    <span class="text">Greetings! I am Atharva's simulated interactive agent. Ask me about my Google Cybersecurity certs, World Teen Parliament experience, or AI workflows.</span>
+                                </div>
+                            </div>
+                            <form class="ai-input-form" id="ai-query-form">
+                                <span class="prompt-sym">&gt;</span>
+                                <input type="text" id="ai-query-input" placeholder="e.g., 'What is your background in AI?' or 'Tell me about VVM'" autocomplete="off">
+                                <button type="submit" class="ai-send-btn"><i class="fas fa-paper-plane"></i></button>
+                            </form>
+                        </div>
+                        <div class="quick-prompts">
+                            <button class="quick-btn" data-query="Tell me about your Google AI certifications">Google AI</button>
+                            <button class="quick-btn" data-query="What did you do at World Teen Parliament?">Teen Parliament</button>
+                            <button class="quick-btn" data-query="Explain your Cybersecurity credentials">Cybersecurity</button>
+                            <button class="quick-btn" data-query="What is the VVM selection?">VVM 2025-26</button>
+                        </div>
+                    </div>
+
+                    <!-- Bento Card 2: Metrics Hexagon Counter -->
+                    <div class="bento-card bento-metric-tile" data-tilt>
+                        <div class="card-glow"></div>
+                        <div class="metric-icon"><i class="fas fa-shield-halved text-neon"></i></div>
+                        <div class="metric-big-num" data-val="24">24<span>+</span></div>
+                        <div class="metric-title">Verified Accreditations</div>
+                        <div class="metric-sub">Issued by Google, Coursera, NIT Raipur, IIT Bombay, Simplilearn & AIM</div>
+                    </div>
+
+                    <!-- Bento Card 3: Live Radar / Skill Constellation -->
+                    <div class="bento-card bento-radar-tile" data-tilt>
+                        <div class="card-glow"></div>
+                        <div class="card-topline">
+                            <div class="tag-chip"><i class="fas fa-crosshairs"></i> APPLIED DOMAINS</div>
+                            <span class="chip-status">CALIBRATED</span>
+                        </div>
+                        <div class="skill-tags-cloud">
+                            <span class="skill-pill" data-score="95"><i class="fas fa-brain"></i> LLMs & GenAI <strong>95%</strong></span>
+                            <span class="skill-pill" data-score="90"><i class="fas fa-network-wired"></i> Network Security <strong>90%</strong></span>
+                            <span class="skill-pill" data-score="92"><i class="fas fa-shield-virus"></i> Threat Defense <strong>92%</strong></span>
+                            <span class="skill-pill" data-score="88"><i class="fas fa-code"></i> Full-Stack JS <strong>88%</strong></span>
+                            <span class="skill-pill" data-score="94"><i class="fas fa-palette"></i> UI/UX Design <strong>94%</strong></span>
+                            <span class="skill-pill" data-score="85"><i class="fas fa-chart-line"></i> Data Analytics <strong>85%</strong></span>
+                            <span class="skill-pill" data-score="91"><i class="fas fa-microphone-alt"></i> Youth Diplomacy <strong>91%</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Bento Card 4: Hardware & Tool Stack Spec Sheet -->
+                    <div class="bento-card bento-col-2 bento-stack-tile" data-tilt>
+                        <div class="card-glow"></div>
+                        <div class="card-topline">
+                            <div class="tag-chip"><i class="fas fa-layer-group"></i> PRODUCTION TECH STACK</div>
+                            <span class="chip-status">MODERN_DEV_OPS</span>
+                        </div>
+                        <div class="stack-grid">
+                            <div class="stack-group">
+                                <span class="group-label">ARTIFICIAL INTELLIGENCE</span>
+                                <div class="group-items">
+                                    <span class="st-item"><i class="fab fa-google"></i> Google GenAI Studio</span>
+                                    <span class="st-item"><i class="fas fa-robot"></i> Prompt Chaining</span>
+                                    <span class="st-item"><i class="fas fa-brain"></i> Claude Artifacts</span>
+                                    <span class="st-item"><i class="fas fa-bolt"></i> Autonomous Agents</span>
+                                </div>
+                            </div>
+                            <div class="stack-group">
+                                <span class="group-label">DEFENSE & INFRASTRUCTURE</span>
+                                <div class="group-items">
+                                    <span class="st-item"><i class="fas fa-lock"></i> Packet Inspection</span>
+                                    <span class="st-item"><i class="fas fa-shield-alt"></i> IDS/IPS Frameworks</span>
+                                    <span class="st-item"><i class="fas fa-bug"></i> Threat Modeling</span>
+                                    <span class="st-item"><i class="fas fa-server"></i> CISSP Principles</span>
+                                </div>
+                            </div>
+                            <div class="stack-group">
+                                <span class="group-label">WEB & USER INTERFACE</span>
+                                <div class="group-items">
+                                    <span class="st-item"><i class="fab fa-html5"></i> Semantic HTML5/CSS3</span>
+                                    <span class="st-item"><i class="fab fa-js"></i> Modern Vanilla JS</span>
+                                    <span class="st-item"><i class="fab fa-wordpress"></i> WordPress Headless</span>
+                                    <span class="st-item"><i class="fas fa-vector-square"></i> Canva Pro Suite</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bento Card 5: Sound & Vibe Player Widget -->
+                    <div class="bento-card bento-vibe-tile" data-tilt>
+                        <div class="card-glow"></div>
+                        <div class="vibe-player">
+                            <div class="vibe-track-info">
+                                <div class="vibe-icon-pulse"><i class="fas fa-music"></i></div>
+                                <div>
+                                    <div class="vibe-title">CYBER_FOCUS // 128 BPM</div>
+                                    <div class="vibe-sub">Deep Synthesizer Ambience</div>
+                                </div>
+                            </div>
+                            <div class="vibe-equalizer" id="equalizer">
+                                <span class="eq-bar"></span>
+                                <span class="eq-bar"></span>
+                                <span class="eq-bar"></span>
+                                <span class="eq-bar"></span>
+                                <span class="eq-bar"></span>
+                                <span class="eq-bar"></span>
+                            </div>
+                            <button class="vibe-toggle-btn" id="vibe-play-btn">
+                                <i class="fas fa-play" id="vibe-icon"></i>
+                                <span>PLAY CODING AMBIENCE</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 3: DEEP INTEL & BIOGRAPHY ================= -->
+        <section class="section intel-dossier" id="intel">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <div class="title-meta">02 // RESEARCH_DOSSIER</div>
+                    <h2 class="section-heading">OPERATIVE <span class="gradient-span">BIOGRAPHY</span></h2>
+                    <p class="section-lead">Extracted from certified secondary records, institutional achievements, and peer-reviewed honors.</p>
+                </div>
+
+                <div class="dossier-layout">
+                    <div class="dossier-terminal">
+                        <div class="terminal-bar">
+                            <div class="terminal-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="terminal-title">DOSSIER_ATHARVA_AGRAWAL.json</div>
+                            <div class="terminal-copy-action" id="copy-dossier-btn" title="Copy raw JSON">
+                                <i class="fas fa-copy"></i>
+                            </div>
+                        </div>
+                        <div class="terminal-body">
+                            <pre><code class="language-json">{
+  <span class="key">"subject"</span>: <span class="str">"Atharva Agrawal"</span>,
+  <span class="key">"location"</span>: <span class="str">"Raipur, Chhattisgarh, India"</span>,
+  <span class="key">"institution"</span>: <span class="str">"Brighton International School, Raipur"</span>,
+  <span class="key">"standing"</span>: <span class="str">"Secondary Student Innovator (Class 8–9, Session 2025–2026)"</span>,
+  <span class="key">"dual_focus"</span>: [
+    <span class="str">"Autonomous Generative AI & Large Language Models"</span>,
+    <span class="str">"Enterprise Cybersecurity Architecture & Defense"</span>
+  ],
+  <span class="key">"distinctions"</span>: {
+    <span class="key">"global_parliament"</span>: <span class="str">"4th World Teen Parliament Influencer (38th Session)"</span>,
+    <span class="key">"national_stem"</span>: <span class="str">"Vidyarthi Vigyan Manthan (VVM) Level-I National Selection"</span>,
+    <span class="key">"collegiate_arenas"</span>: [
+      <span class="str">"IIM Indore The Pi Quiz Finalist"</span>,
+      <span class="str">"IIT Bombay Eureka! Junior Entrepreneurship Challenge"</span>,
+      <span class="str">"NIT Raipur YEISS INAE Youth Conclave"</span>
+    ],
+    <span class="key">"hackathon_awards"</span>: <span class="str">"1st Place Gold Medalist - Mindspark Web Dev 2026"</span>
+  },
+  <span class="key">"mission_statement"</span>: <span class="str">"Engineering ethical, resilient, and transformative technology solutions to bridge tier-2 regional potential with global computational excellence."</span>
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="dossier-narrative">
+                        <div class="narrative-block">
+                            <h3><i class="fas fa-compass text-neon"></i> The Dual-Engine Philosophy</h3>
+                            <p>
+                                Rather than restricting his craft to pure theoretical software development, Atharva operates on a dual-engine model: combining <strong>rigorous computational intelligence (AI/ML)</strong> with <strong>defensive system hardening (Cybersecurity)</strong>. 
+                            </p>
+                            <p>
+                                Having mastered the 7-course Google AI Specialization alongside Google's foundational cybersecurity triad, he brings practical architecture knowledge to real-world youth problems—from model explainability to network threat auditing.
+                            </p>
+                        </div>
+
+                        <div class="narrative-block">
+                            <h3><i class="fas fa-bullhorn text-neon"></i> Youth Policy & Global Voice</h3>
+                            <p>
+                                At the 38th session of the <strong>4th World Teen Parliament (Blub World)</strong>, Atharva stood as a parliamentary representative, authoring proposals addressing digital literacy divides, responsible AI ethics in high-school education, and cyber safety for youth netizens across emerging economies.
+                            </p>
+                        </div>
+
+                        <div class="dossier-stat-row">
+                            <div class="dossier-pill-box">
+                                <div class="dp-val">100%</div>
+                                <div class="dp-lbl">Verified Desktop Certs</div>
+                            </div>
+                            <div class="dossier-pill-box">
+                                <div class="dp-val">IIM & IIT</div>
+                                <div class="dp-lbl">National Competitions</div>
+                            </div>
+                            <div class="dossier-pill-box">
+                                <div class="dp-val">Raipur</div>
+                                <div class="dp-lbl">Home Base</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 4: 3D CERTIFICATE VAULT ================= -->
+        <section class="section cert-vault" id="vault">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <div class="title-meta">03 // DIPLOMA_VAULT</div>
+                    <h2 class="section-heading">24+ ACCREDITED <span class="gradient-span">CREDENTIALS</span></h2>
+                    <p class="section-lead">Verified physical & digital certifications issued by Google, Coursera, NIT Raipur, IIT Bombay, Simplilearn, and Indian Ministries.</p>
+                </div>
+
+                <!-- Vault Category Filter Deck -->
+                <div class="vault-filter-deck">
+                    <button class="vault-btn active" data-vault-filter="all">
+                        <i class="fas fa-layer-group"></i> ALL ARCHIVES [24]
+                    </button>
+                    <button class="vault-btn" data-vault-filter="ai">
+                        <i class="fas fa-robot"></i> AI & MACHINE LEARNING [7]
+                    </button>
+                    <button class="vault-btn" data-vault-filter="cyber">
+                        <i class="fas fa-shield-alt"></i> CYBER DEFENSE [3]
+                    </button>
+                    <button class="vault-btn" data-vault-filter="competition">
+                        <i class="fas fa-trophy"></i> NATIONAL ARENAS [7]
+                    </button>
+                    <button class="vault-btn" data-vault-filter="web">
+                        <i class="fas fa-code"></i> WEB & DESIGN [3]
+                    </button>
+                    <button class="vault-btn" data-vault-filter="workshop">
+                        <i class="fas fa-microchip"></i> WORKSHOPS & SUMMITS [4]
+                    </button>
+                </div>
+
+                <!-- Live Search Bar inside Vault -->
+                <div class="vault-search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="vault-search-input" placeholder="Search by title, issuer, or keyword (e.g., 'Google', 'IIM', 'Network', 'Python')...">
+                    <span class="vault-counter" id="vault-count-badge">Displaying 24 credentials</span>
+                </div>
+
+                <!-- Vault Dynamic Grid -->
+                <div class="vault-cards-grid" id="vault-grid">
+                    <!-- Populated dynamically via JS with 3D tilt, high-res previews, and verification links -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 5: FEATURED PROTOTYPES ================= -->
+        <section class="section prototypes-gallery" id="projects">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <div class="title-meta">04 // CODE_ENGINEERING</div>
+                    <h2 class="section-heading">FEATURED <span class="gradient-span">PROTOTYPES</span></h2>
+                    <p class="section-lead">Hands-on applications demonstrating autonomous prompt chaining, security threat mitigation, and interactive web architecture.</p>
+                </div>
+
+                <div class="prototypes-deck" id="prototypes-deck">
+                    <!-- Interactive 3D Case Study Cards generated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 6: ARENA & COMPETITION TIMELINE ================= -->
+        <section class="section arena-timeline" id="arena">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <div class="title-meta">05 // COMBAT_RECORD</div>
+                    <h2 class="section-heading">NATIONAL ARENAS & <span class="gradient-span">OLYMPIADS</span></h2>
+                    <p class="section-lead">Proven competitive aptitude across national-level STEM olympiads, hackathons, and youth parliamentary summits.</p>
+                </div>
+
+                <div class="timeline-cyber-stream">
+
+                    <div class="stream-event">
+                        <div class="event-glow-node"></div>
+                        <div class="event-card" data-tilt>
+                            <div class="event-meta">
+                                <span class="badge-gold"><i class="fas fa-trophy"></i> 1ST PLACE GOLD MEDAL</span>
+                                <span class="event-date">SESSION 2026</span>
+                            </div>
+                            <h3 class="event-title">Mindspark 2026 — Design.com Web Dev Hackathon</h3>
+                            <div class="event-org"><i class="fas fa-building"></i> Brighton International School Inter-School Conclave</div>
+                            <p class="event-body">
+                                Championed 1st place in the flagship web development hackathon. Engineered a mobile-first, high-performance responsive web application utilizing custom CSS grid architectures, accessible semantic trees, and real-time interactive DOM rendering within tight competitive time limits.
+                            </p>
+                            <div class="event-tags">
+                                <span>CSS Grids</span><span>DOM Engineering</span><span>Live Hackathon</span><span>1st Place Gold</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stream-event">
+                        <div class="event-glow-node"></div>
+                        <div class="event-card" data-tilt>
+                            <div class="event-meta">
+                                <span class="badge-cyan"><i class="fas fa-atom"></i> NATIONAL LEVEL-I MERIT</span>
+                                <span class="event-date">2025–2026</span>
+                            </div>
+                            <h3 class="event-title">Vidyarthi Vigyan Manthan (VVM) National Talent Search</h3>
+                            <div class="event-org"><i class="fas fa-award"></i> NCERT, Vigyan Prasar (Govt. of India) & Vijnana Bharati (VIBHA)</div>
+                            <p class="event-body">
+                                Selected in the Level-I National Online Examination representing Brighton International School (Candidate ID: CG0291627). Tested on Indian scientific heritage, experimental reasoning, combinatorial logic, and foundational physics.
+                            </p>
+                            <div class="event-tags">
+                                <span>Govt. of India</span><span>NCERT Science Talent</span><span>Logic & Aptitude</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stream-event">
+                        <div class="event-glow-node"></div>
+                        <div class="event-card" data-tilt>
+                            <div class="event-meta">
+                                <span class="badge-purple"><i class="fas fa-landmark"></i> GLOBAL REPRESENTATIVE</span>
+                                <span class="event-date">2026</span>
+                            </div>
+                            <h3 class="event-title">4th World Teen Parliament (38th Session)</h3>
+                            <div class="event-org"><i class="fas fa-globe"></i> Blub World Global Youth Forum</div>
+                            <p class="event-body">
+                                Recognized as a Blub World Teen Influencer. Drafted global youth policy resolutions on digital equity, ethical artificial intelligence governance, and school cybersecurity standards.
+                            </p>
+                            <div class="event-tags">
+                                <span>Global Governance</span><span>Policy Drafting</span><span>Youth Advocacy</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stream-event">
+                        <div class="event-glow-node"></div>
+                        <div class="event-card" data-tilt>
+                            <div class="event-meta">
+                                <span class="badge-amber"><i class="fas fa-brain"></i> IIM INDORE FINALIST</span>
+                                <span class="event-date">2025</span>
+                            </div>
+                            <h3 class="event-title">The Pi Quiz — Atharv Ranbhoomi (IIM Indore)</h3>
+                            <div class="event-org"><i class="fas fa-university"></i> Indian Institute of Management (IIM) Indore</div>
+                            <p class="event-body">
+                                Delegate and finalist at Central India's premier collegiate management conclave. Solved complex mathematical puzzles, algorithmic scenarios, and quantitative modeling challenges.
+                            </p>
+                            <div class="event-tags">
+                                <span>IIM Indore</span><span>Quantitative Modeling</span><span>Combinatorics</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stream-event">
+                        <div class="event-glow-node"></div>
+                        <div class="event-card" data-tilt>
+                            <div class="event-meta">
+                                <span class="badge-red"><i class="fas fa-rocket"></i> IIT BOMBAY VENTURE FINALIST</span>
+                                <span class="event-date">2025</span>
+                            </div>
+                            <h3 class="event-title">Eureka! Junior 2025 National Entrepreneurship Challenge</h3>
+                            <div class="event-org"><i class="fas fa-lightbulb"></i> Entrepreneurship Cell (E-Cell), IIT Bombay</div>
+                            <p class="event-body">
+                                Qualified and pitched a tech-driven social innovation model in Asia's largest youth business competition. Received mentorship in business model canvases, unit economics, and rapid prototyping feasibility.
+                            </p>
+                            <div class="event-tags">
+                                <span>IIT Bombay</span><span>Venture Pitching</span><span>Business Model Canvas</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stream-event">
+                        <div class="event-glow-node"></div>
+                        <div class="event-card" data-tilt>
+                            <div class="event-meta">
+                                <span class="badge-cyan"><i class="fas fa-hands-helping"></i> NATIONAL CHANGEMAKER</span>
+                                <span class="event-date">2026</span>
+                            </div>
+                            <h3 class="event-title">Vivo Ignite 2026: Changemakers Challenge (2nd Edition)</h3>
+                            <div class="event-org"><i class="fas fa-mobile-alt"></i> Vivo India & Igniting Change Foundation</div>
+                            <p class="event-body">
+                                Selected national entry for socio-economic technological innovation. Designed an actionable tech solution engineered to enhance community safety and digital access.
+                            </p>
+                            <div class="event-tags">
+                                <span>Social Impact</span><span>Tech For Good</span><span>National Recognition</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 7: UPLINK & SECURE TRANSMISSION ================= -->
+        <section class="section uplink-terminal" id="uplink">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <div class="title-meta">06 // DIRECT_TRANSMISSION</div>
+                    <h2 class="section-heading">SECURE <span class="gradient-span">COMMUNICATION UPLINK</span></h2>
+                    <p class="section-lead">Initiate an encrypted dispatch for research collaborations, hackathon invitations, or high-impact innovation initiatives.</p>
+                </div>
+
+                <div class="uplink-grid">
+                    <div class="uplink-intel-card" data-tilt>
+                        <div class="intel-header">
+                            <span class="pulse-ring"></span>
+                            <h4>AGENT DISPATCH NODES</h4>
+                        </div>
+                        <p class="intel-subtext">Operating primarily from Raipur, Chhattisgarh, with open digital bandwidth for national & international youth teams.</p>
+                        
+                        <div class="transmission-channels">
+                            <a href="https://www.instagram.com/atharva.agrawal8/" target="_blank" rel="noopener" class="channel-pill">
+                                <i class="fab fa-instagram"></i>
+                                <div class="cp-text">
+                                    <span class="cp-label">INSTAGRAM</span>
+                                    <strong class="cp-val">@atharva.agrawal8</strong>
+                                </div>
+                                <i class="fas fa-external-link-alt cp-arrow"></i>
+                            </a>
+
+                            <a href="https://www.linkedin.com/in/atharvaagrawal8/" target="_blank" rel="noopener" class="channel-pill">
+                                <i class="fab fa-linkedin-in"></i>
+                                <div class="cp-text">
+                                    <span class="cp-label">LINKEDIN</span>
+                                    <strong class="cp-val">in/atharvaagrawal8</strong>
+                                </div>
+                                <i class="fas fa-external-link-alt cp-arrow"></i>
+                            </a>
+
+                            <a href="https://github.com/atharvaagrawal8" target="_blank" rel="noopener" class="channel-pill">
+                                <i class="fab fa-github"></i>
+                                <div class="cp-text">
+                                    <span class="cp-label">GITHUB</span>
+                                    <strong class="cp-val">github.com/atharvaagrawal8</strong>
+                                </div>
+                                <i class="fas fa-external-link-alt cp-arrow"></i>
+                            </a>
+
+                            <a href="https://twitter.com/atharvaagrawal8" target="_blank" rel="noopener" class="channel-pill">
+                                <i class="fab fa-x-twitter"></i>
+                                <div class="cp-text">
+                                    <span class="cp-label">X / TWITTER</span>
+                                    <strong class="cp-val">@atharvaagrawal8</strong>
+                                </div>
+                                <i class="fas fa-external-link-alt cp-arrow"></i>
+                            </a>
+                        </div>
+
+                        <div class="uplink-stats-badge">
+                            <i class="fas fa-bolt"></i> AVERAGE RESPONSE TIME: &lt; 12 HOURS
+                        </div>
+                    </div>
+
+                    <!-- Interactive Cyberpunk Transmission Form -->
+                    <div class="uplink-form-card" data-tilt>
+                        <div class="card-glow"></div>
+                        <div class="card-topline">
+                            <div class="tag-chip"><i class="fas fa-key"></i> TRANSMIT_PAYLOAD</div>
+                            <span class="chip-status">AES_256_MODE</span>
+                        </div>
+
+                        <form class="cyber-form" id="uplink-form">
+                            <div class="cyber-form-group">
+                                <label for="form-name">OPERATIVE_NAME // SENDER</label>
+                                <div class="cyber-input-wrap">
+                                    <i class="fas fa-user-astronaut"></i>
+                                    <input type="text" id="form-name" placeholder="Dr. Jane Doe / John Smith" required>
+                                </div>
+                            </div>
+
+                            <div class="cyber-form-group">
+                                <label for="form-email">CONTACT_FREQUENCY // EMAIL</label>
+                                <div class="cyber-input-wrap">
+                                    <i class="fas fa-envelope-open-text"></i>
+                                    <input type="email" id="form-email" placeholder="jane.doe@organization.org" required>
+                                </div>
+                            </div>
+
+                            <div class="cyber-form-group">
+                                <label for="form-subject">COMMUNICATION_HEADER // TOPIC</label>
+                                <div class="cyber-input-wrap">
+                                    <i class="fas fa-heading"></i>
+                                    <input type="text" id="form-subject" placeholder="Hackathon Project / Research / AI Fellowship" required>
+                                </div>
+                            </div>
+
+                            <div class="cyber-form-group">
+                                <label for="form-msg">TRANSMISSION_PAYLOAD // MESSAGE</label>
+                                <div class="cyber-input-wrap text-wrap">
+                                    <textarea id="form-msg" rows="4" placeholder="Brief your proposal, timeline, and collaborative expectations..." required></textarea>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="cyber-submit-btn" id="uplink-submit-btn">
+                                <span class="btn-scanline"></span>
+                                <i class="fas fa-satellite"></i>
+                                <span>SEND ENCRYPTED DISPATCH</span>
+                            </button>
+                            <div class="form-feedback" id="form-feedback"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="cyber-footer">
+            <div class="container footer-content">
+                <div class="footer-top">
+                    <div class="footer-brand">
+                        <span class="brand-monogram">AA</span>
+                        <div>
+                            <h4>ATHARVA AGRAWAL</h4>
+                            <p>AI Architect · Cybersecurity Researcher · Brighton International School</p>
+                        </div>
+                    </div>
+                    <div class="footer-meta-stats">
+                        <div class="f-stat"><span class="neon">24+</span> Diplomas</div>
+                        <div class="f-stat"><span class="neon">11+</span> Arenas</div>
+                        <div class="f-stat"><span class="neon">Raipur</span> HQ</div>
+                    </div>
+                </div>
+
+                <div class="footer-divider"></div>
+
+                <div class="footer-bottom">
+                    <p class="footer-rights">
+                        &copy; 2026 ATHARVA AGRAWAL. DESIGNED WITH HIGH-FIDELITY CYBER-EDITORIAL ARCHITECTURE. ALL RIGHTS SECURED.
+                    </p>
+                    <div class="footer-social-strip">
+                        <a href="https://www.instagram.com/atharva.agrawal8/" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/in/atharvaagrawal8/" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/atharvaagrawal8" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+                        <a href="https://twitter.com/atharvaagrawal8" target="_blank" rel="noopener"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Interactive Certificate Holographic Modal -->
+    <div class="holo-modal" id="holo-modal" aria-hidden="true">
+        <div class="holo-modal-backdrop" id="holo-backdrop"></div>
+        <div class="holo-modal-dialog">
+            <button class="holo-close-btn" id="holo-close-btn" title="Close Modal">&times;</button>
+            <div class="holo-modal-grid">
+                <div class="holo-view-side">
+                    <div class="holo-img-container">
+                        <img src="" alt="Certificate" id="holo-modal-img" class="holo-main-img">
+                        <div class="holo-scan-sweep"></div>
+                    </div>
+                </div>
+                <div class="holo-info-side">
+                    <div class="holo-pill-tag" id="holo-modal-badge">SPECIALIZATION</div>
+                    <h3 class="holo-modal-title" id="holo-modal-title">Certificate Title</h3>
+                    
+                    <div class="holo-meta-table">
+                        <div class="meta-row">
+                            <span class="label">ISSUING ENTITY:</span>
+                            <span class="val text-neon" id="holo-modal-issuer">Google / Coursera</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="label">DATE ISSUED:</span>
+                            <span class="val" id="holo-modal-date">Aug 1, 2026</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="label">STATUS:</span>
+                            <span class="val text-neon"><i class="fas fa-check-shield"></i> VERIFIED & AUTHENTICATED</span>
+                        </div>
+                    </div>
+
+                    <p class="holo-modal-desc" id="holo-modal-desc">
+                        Comprehensive evaluation and verification description here.
+                    </p>
+
+                    <div class="holo-action-buttons">
+                        <a href="#" target="_blank" rel="noopener" class="holo-btn holo-btn-primary" id="holo-verify-link">
+                            <i class="fas fa-external-link-alt"></i> VERIFY ONLINE
+                        </a>
+                        <a href="#" target="_blank" class="holo-btn holo-btn-outline" id="holo-view-asset">
+                            <i class="fas fa-file-pdf"></i> INSPECT HIGH-RES ASSET
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Matrix CLI Terminal Fullscreen Overlay -->
+    <div class="cli-overlay" id="cli-overlay" aria-hidden="true">
+        <div class="cli-window">
+            <div class="cli-header">
+                <div class="cli-dots">
+                    <span class="dot-red" id="cli-close"></span>
+                    <span class="dot-yellow"></span>
+                    <span class="dot-green"></span>
+                </div>
+                <div class="cli-title">atharva@quantum-core: ~ (bash / zsh)</div>
+                <button class="cli-close-btn" id="cli-close-x">&times;</button>
+            </div>
+            <div class="cli-body" id="cli-screen">
+                <div class="cli-line banner">
+                    ====================================================<br>
+                    ATHARVA AGRAWAL // QUANTUM CORE TERMINAL v4.2<br>
+                    TYPE 'help' TO REVEAL ALL AVAILABLE COMMANDS<br>
+                    ====================================================
+                </div>
+                <div class="cli-line">Type <span class="text-neon">'help'</span>, <span class="text-neon">'admin'</span>, <span class="text-neon">'certs'</span>, <span class="text-neon">'bio'</span>, <span class="text-neon">'skills'</span>, <span class="text-neon">'contact'</span>, or <span class="text-neon">'clear'</span>.</div>
+            </div>
+            <div class="cli-input-line">
+                <span class="cli-prompt">guest@atharva-core:~$</span>
+                <input type="text" id="cli-input" autofocus autocomplete="off" spellcheck="false">
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Hub, Real ML Brain, WordPress Customizer & Main Engine -->
+    <script src="data/portfolio-data.js"></script>
+    <script src="assets/js/ml-brain.js"></script>
+    <script src="assets/js/wordpress-customizer.js"></script>
+    <script src="assets/js/port2.js"></script>
+</body>
+</html>

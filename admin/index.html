@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATHARVA AGRAWAL // Secure Enterprise CMS & ML Suite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/port2.css">
+    <style>
+        body {
+            background-color: #030712;
+            color: #e2e8f0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+        }
+        .admin-auth-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-card {
+            background: #0b0f19;
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            box-shadow: 0 0 50px rgba(6, 182, 212, 0.2);
+            border-radius: 16px;
+            max-width: 440px;
+            width: 100%;
+            padding: 36px;
+            text-align: center;
+        }
+        .auth-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid #06b6d4;
+            color: #06b6d4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin: 0 auto 20px;
+        }
+        .auth-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.6rem;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .auth-sub {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        .auth-input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        .auth-input-group label {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        .auth-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #030712;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .auth-input:focus {
+            border-color: #06b6d4;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+        }
+        .auth-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #06b6d4, #10b981);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .auth-btn:hover {
+            transform: scale(1.02);
+        }
+        .auth-error {
+            color: #f43f5e;
+            font-size: 12px;
+            margin-top: 14px;
+            min-height: 20px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Admin Dashboard View */
+        .admin-dashboard {
+            display: none;
+            padding: 30px 20px;
+            max-width: 1320px;
+            margin: 0 auto;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 30px;
+        }
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .admin-badge {
+            background: #06b6d4;
+            color: #000;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            font-size: 12px;
+        }
+        .admin-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 10px;
+            overflow-x: auto;
+        }
+        .admin-tab {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .admin-tab.active, .admin-tab:hover {
+            background: #06b6d4;
+            color: #000;
+            border-color: #06b6d4;
+            font-weight: 700;
+        }
+        .admin-actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .admin-btn-primary {
+            background: #10b981;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .admin-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        }
+        .admin-btn-outline {
+            background: transparent;
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .admin-btn-outline:hover {
+            border-color: #06b6d4;
+            color: #06b6d4;
+        }
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+        .admin-item-card {
+            background: #0b0f19;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: border-color 0.2s;
+        }
+        .admin-item-card:hover {
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+        .admin-item-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #06b6d4;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .admin-item-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: #fff;
+            line-height: 1.35;
+        }
+        .admin-item-desc {
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.55;
+            flex: 1;
+        }
+        .admin-item-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 12px;
+        }
+        .btn-sm-del {
+            background: rgba(244, 63, 94, 0.15);
+            border: 1px solid #f43f5e;
+            color: #f43f5e;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .btn-sm-edit {
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid #06b6d4;
+            color: #06b6d4;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        /* Modal for adding/editing */
+        .editor-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 10000;
+        }
+        .editor-modal.active {
+            display: flex;
+        }
+        .editor-modal-card {
+            background: #0b0f19;
+            border: 1px solid #06b6d4;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 640px;
+            padding: 32px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 50px rgba(6, 182, 212, 0.3);
+        }
+        .form-row {
+            margin-bottom: 18px;
+        }
+        .form-row label {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background: #030712;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+        }
+        .form-control:focus {
+            border-color: #06b6d4;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Security Auth Screen -->
+    <div class="admin-auth-screen" id="auth-screen">
+        <div class="auth-card">
+            <div class="auth-icon">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <h1 class="auth-title">ATHARVA AGRAWAL // CMS</h1>
+            <p class="auth-sub">Enter credentials to authenticate via Firebase & Secure Keyring.</p>
+
+            <form id="auth-form">
+                <div class="auth-input-group">
+                    <label for="admin-email">ADMIN EMAIL (OPTIONAL / FIREBASE)</label>
+                    <input type="email" id="admin-email" class="auth-input" placeholder="admin@atharva.dev (or leave blank)">
+                </div>
+                <div class="auth-input-group">
+                    <label for="admin-pass">ACCESS PASSPHRASE</label>
+                    <input type="password" id="admin-pass" class="auth-input" placeholder="Enter password" autofocus required>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: flex-start; gap: 8px; margin-bottom: 20px;">
+                    <input type="checkbox" id="remember-me-checkbox" style="cursor: pointer; width: 16px; height: 16px; accent-color: #06b6d4;">
+                    <label for="remember-me-checkbox" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94a3b8; cursor: pointer; user-select: none;">
+                        REMEMBER ME ON THIS DEVICE
+                    </label>
+                </div>
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-key"></i> UNLOCK CMS CONSOLE
+                </button>
+                <div class="auth-error" id="auth-err"></div>
+            </form>
+            <div style="margin-top: 15px;">
+                <a href="../index.html" style="color: #94a3b8; font-size: 12px; text-decoration: none;">
+                    <i class="fas fa-arrow-left"></i> Return to Live Portfolio
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Protected Admin Dashboard -->
+    <div class="admin-dashboard" id="admin-dashboard">
+        <div class="admin-header">
+            <div class="admin-brand">
+                <span class="admin-badge">VERIFIED ADMIN</span>
+                <div>
+                    <h2 style="font-family: 'Syne', sans-serif; font-size: 1.4rem; color: #fff;">ATHARVA AGRAWAL // ENTERPRISE CMS</h2>
+                    <p style="font-size: 12px; color: #94a3b8;">Dynamic Cloud Sync · In-Browser ML Brain · WordPress-Style Visual Customizer</p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="../index.html" class="admin-btn-primary" target="_blank">
+                    <i class="fas fa-paint-brush"></i> Launch WordPress Visual Customizer
+                </a>
+                <button class="admin-btn-outline" id="export-json-btn">
+                    <i class="fas fa-download"></i> Export data.js
+                </button>
+                <button class="admin-btn-outline" id="logout-btn" style="border-color: #f43f5e; color: #f43f5e;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="admin-tab active" data-tab="identity"><i class="fas fa-id-card"></i> Brand & Profile</button>
+            <button class="admin-tab" data-tab="menus"><i class="fas fa-bars"></i> Navigation Menus</button>
+            <button class="admin-tab" data-tab="appearance"><i class="fas fa-palette"></i> Appearance & Styling</button>
+            <button class="admin-tab" data-tab="sections"><i class="fas fa-layer-group"></i> Sections & Layout</button>
+            <button class="admin-tab" data-tab="certs"><i class="fas fa-award"></i> Certificates (<span id="certs-count">24</span>)</button>
+            <button class="admin-tab" data-tab="skills"><i class="fas fa-brain"></i> Skills (<span id="skills-count">7</span>)</button>
+            <button class="admin-tab" data-tab="ml"><i class="fas fa-robot"></i> ML Brain Training</button>
+            <button class="admin-tab" data-tab="settings"><i class="fas fa-cog"></i> Security & Contact</button>
+        </div>
+
+        <!-- Section 0: Brand & Profile Identity Manager -->
+        <div class="tab-pane" id="pane-identity">
+            <div class="admin-actions-bar">
+                <div>
+                    <h3 style="font-size: 1.1rem; color: #fff;">Universal Brand & Profile Identity Configuration</h3>
+                    <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Edit your website name, profile photo, headline tag, school, bio manifesto, and social channels.</p>
+                </div>
+                <button class="admin-btn-primary" id="save-identity-btn">
+                    <i class="fas fa-save"></i> Save Identity Changes
+                </button>
+            </div>
+            <div style="background: #0b0f19; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 28px; max-width: 800px;">
+                <div class="form-row">
+                    <label>WEBSITE BRAND NAME (DISPLAYED IN NAVBAR & HERO)</label>
+                    <input type="text" id="id-brand-name" class="form-control" placeholder="atharva.ai or Your Custom Brand">
+                </div>
+                <div class="form-row">
+                    <label>HERO DISPLAY NAME (ROW 1 & ROW 2)</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <input type="text" id="id-first-name" class="form-control" placeholder="ATHARVA">
+                        <input type="text" id="id-last-name" class="form-control" placeholder="AGRAWAL">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label>PROFILE PHOTO (FILE UPLOAD OR URL)</label>
+                    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
+                        <input type="file" id="id-photo-file" accept="image/*" class="form-control" style="flex: 1;">
+                        <span style="font-size: 11px; color: #94a3b8;">OR</span>
+                        <input type="url" id="id-photo-url" class="form-control" placeholder="Image URL (https://...)" style="flex: 1.5;">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label>HEADER STATUS BADGE</label>
+                    <input type="text" id="id-header-badge" class="form-control" placeholder="NEXT-GEN AUTONOMOUS INNOVATOR & STUDENT RESEARCHER">
+                </div>
+                <div class="form-row">
+                    <label>BIOGRAPHY / MANIFESTO TEXT</label>
+                    <textarea id="id-bio-text" class="form-control" rows="4" placeholder="Secondary student innovator exploring the synthesis of Large Language Model architectures..."></textarea>
+                </div>
+                <div class="form-row">
+                    <label>SOCIAL PROFILES (INSTAGRAM, LINKEDIN, GITHUB, X/TWITTER)</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <input type="url" id="id-soc-insta" class="form-control" placeholder="Instagram URL">
+                        <input type="url" id="id-soc-linkedin" class="form-control" placeholder="LinkedIn URL">
+                        <input type="url" id="id-soc-github" class="form-control" placeholder="GitHub URL">
+                        <input type="url" id="id-soc-twitter" class="form-control" placeholder="Twitter / X URL">
+                    </div>
+                </div>
+                <span id="identity-feedback" style="font-size: 12px; color: #10b981;"></span>
+            </div>
+        </div>
+
+        <!-- Section 0B: Navigation Menus Manager -->
+        <div class="tab-pane" id="pane-menus" style="display: none;">
+            <div class="admin-actions-bar">
+                <div>
+                    <h3 style="font-size: 1.1rem; color: #fff;">Navigation Menus Manager</h3>
+                    <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Add, edit, reorder, or toggle menu items in the floating navigation island.</p>
+                </div>
+                <button class="admin-btn-primary" id="add-menu-item-btn">
+                    <i class="fas fa-plus"></i> Add Menu Item
+                </button>
+            </div>
+            <div class="admin-grid" id="admin-menus-grid">
+                <!-- Dynamically rendered -->
+            </div>
+        </div>
+
+        <!-- Section 0C: Appearance & Theme Customizer -->
+        <div class="tab-pane" id="pane-appearance" style="display: none;">
+            <div class="admin-actions-bar">
+                <div>
+                    <h3 style="font-size: 1.1rem; color: #fff;">Appearance & Minute Styling Controls</h3>
+                    <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Adjust primary/secondary colors, background tone, card border radii, and custom CSS.</p>
+                </div>
+                <button class="admin-btn-primary" id="save-appearance-btn">
+                    <i class="fas fa-save"></i> Save Appearance Changes
+                </button>
+            </div>
+            <div style="background: #0b0f19; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 28px; max-width: 800px;">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px;">
+                    <div class="form-row">
+                        <label>PRIMARY NEON COLOR</label>
+                        <input type="color" id="theme-primary-color" style="width:100%; height:42px; background:transparent; border:none; cursor:pointer;" value="#06b6d4">
+                    </div>
+                    <div class="form-row">
+                        <label>SECONDARY EMERALD COLOR</label>
+                        <input type="color" id="theme-secondary-color" style="width:100%; height:42px; background:transparent; border:none; cursor:pointer;" value="#10b981">
+                    </div>
+                    <div class="form-row">
+                        <label>ACCENT VIOLET COLOR</label>
+                        <input type="color" id="theme-accent-color" style="width:100%; height:42px; background:transparent; border:none; cursor:pointer;" value="#8b5cf6">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label>CARD BORDER RADIUS (CORNER ROUNDNESS)</label>
+                    <select id="theme-card-radius" class="form-control">
+                        <option value="8px">Subtle Rounded (8px)</option>
+                        <option value="16px">Standard (16px)</option>
+                        <option value="24px" selected>Awwwards Luxury (24px)</option>
+                        <option value="32px">Super Smooth (32px)</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>CUSTOM CSS INJECTION (MINUTE STYLING OVERRIDES)</label>
+                    <textarea id="theme-custom-css" class="form-control" rows="5" placeholder="/* Enter any custom CSS overrides here (e.g. .section-heading { letter-spacing: -2px; } */" style="font-family: monospace; font-size: 11px;"></textarea>
+                </div>
+
+                <span id="appearance-feedback" style="font-size: 12px; color: #10b981;"></span>
+            </div>
+        </div>
+
+        <!-- Section 0D: Sections & Layout Manager -->
+        <div class="tab-pane" id="pane-sections" style="display: none;">
+            <div class="admin-actions-bar">
+                <div>
+                    <h3 style="font-size: 1.1rem; color: #fff;">Section Visibility & Gutenberg-Style Block Toggle</h3>
+                    <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Enable or disable entire sections of your website with one click.</p>
+                </div>
+                <button class="admin-btn-primary" id="save-sections-btn">
+                    <i class="fas fa-save"></i> Save Section Layout
+                </button>
+            </div>
+            <div class="admin-grid" id="admin-sections-grid">
+                <!-- Dynamically rendered -->
+            </div>
+            <div style="margin-top: 15px;">
+                <span id="sections-feedback" style="font-size: 12px; color: #10b981;"></span>
+            </div>
+        </div>
+
+        <!-- Section 1: Certificates Manager -->
+        <div class="tab-pane" id="pane-certs">
+            <div class="admin-actions-bar">
+                <h3 style="font-size: 1.1rem; color: #fff;">Manage Accredited Certifications</h3>
+                <button class="admin-btn-primary" id="add-cert-btn">
+                    <i class="fas fa-plus"></i> Add New Certificate
+                </button>
+            </div>
+            <div class="admin-grid" id="admin-certs-grid">
+                <!-- Dynamically rendered -->
+            </div>
+        </div>
+
+        <!-- Section 2: Skills Manager -->
+        <div class="tab-pane" id="pane-skills" style="display: none;">
+            <div class="admin-actions-bar">
+                <h3 style="font-size: 1.1rem; color: #fff;">Manage Domain Proficiencies</h3>
+                <button class="admin-btn-primary" id="add-skill-btn">
+                    <i class="fas fa-plus"></i> Add New Skill
+                </button>
+            </div>
+            <div class="admin-grid" id="admin-skills-grid">
+                <!-- Dynamically rendered -->
+            </div>
+        </div>
+
+        <!-- Section 3: Machine Learning Brain Trainer & Custom CLI Commands -->
+        <div class="tab-pane" id="pane-ml" style="display: none;">
+            <div class="admin-actions-bar">
+                <div>
+                    <h3 style="font-size: 1.1rem; color: #fff;">Terminal ML Brain Trainer (NLP Vector Space)</h3>
+                    <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Train the in-browser neural NLP model that powers the AI Sandbox and Matrix Terminal.</p>
+                </div>
+                <button class="admin-btn-primary" id="add-ml-intent-btn">
+                    <i class="fas fa-plus"></i> Add Training Intent
+                </button>
+            </div>
+            <div class="admin-grid" id="admin-ml-grid">
+                <!-- Populated dynamically -->
+            </div>
+
+            <!-- Custom CLI Commands Manager -->
+            <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 30px;">
+                <div class="admin-actions-bar">
+                    <div>
+                        <h3 style="font-size: 1.1rem; color: #fff;">Custom Matrix CLI Commands</h3>
+                        <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Define custom terminal commands (e.g. 'secret', 'github', 'awards') that run in the interactive terminal overlay.</p>
+                    </div>
+                    <button class="admin-btn-primary" id="add-cli-cmd-btn">
+                        <i class="fas fa-plus"></i> Add CLI Command
+                    </button>
+                </div>
+                <div class="admin-grid" id="admin-cli-cmds-grid">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: WordPress Block CMS -->
+        <div class="tab-pane" id="pane-blocks" style="display: none;">
+            <div style="background: #0b0f19; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 24px;">
+                <h3 style="color: #fff; margin-bottom: 12px;"><i class="fab fa-wordpress" style="color: #06b6d4;"></i> WordPress-Style Visual Block Editor</h3>
+                <p style="font-size: 13px; color: #94a3b8; line-height: 1.6; margin-bottom: 20px;">
+                    When you are logged into the Admin Panel, navigate to your live website ([index.html](../index.html)). You will see a top <strong>WordPress Admin Bar</strong>.
+                    <br>1. Click <strong>"ENABLE VISUAL BLOCK EDITING"</strong> on the website.
+                    <br>2. Click any paragraph, heading, bio statement, or text to type and edit in real time!
+                    <br>3. Click <strong>"PUBLISH CHANGES"</strong> to save.
+                </p>
+                <a href="../index.html" class="admin-btn-primary" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Open Website & Edit Visually
+                </a>
+            </div>
+        </div>
+
+        <!-- Section 5: Settings -->
+        <div class="tab-pane" id="pane-settings" style="display: none;">
+            <div style="background: #0b0f19; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 24px; max-width: 640px;">
+                <h3 style="color: #fff; margin-bottom: 12px;">Web3Forms Contact API & Password Security</h3>
+                
+                <div class="form-row">
+                    <label>WEB3FORMS ACCESS KEY (FREE AT WEB3FORMS.COM)</label>
+                    <input type="text" id="setting-web3-key" class="form-control" placeholder="e.g. 550e8400-e29b-41d4-a716-446655440000">
+                </div>
+
+                <div class="form-row">
+                    <label>SET NEW ADMIN PASSWORD (ENCRYPTED WITH SHA-256)</label>
+                    <input type="password" id="setting-new-pass" class="form-control" placeholder="Enter new strong password">
+                </div>
+
+                <button class="admin-btn-primary" id="save-settings-btn">
+                    <i class="fas fa-save"></i> Save Configuration
+                </button>
+                <span id="settings-feedback" style="margin-left: 10px; font-size: 12px; color: #10b981;"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Add/Edit Modal -->
+    <div class="editor-modal" id="cert-editor-modal">
+        <div class="editor-modal-card">
+            <h3 id="cert-modal-header" style="color: #fff; margin-bottom: 20px;">Add New Certificate</h3>
+            <form id="cert-edit-form">
+                <input type="hidden" id="edit-cert-id">
+                <div class="form-row">
+                    <label>CERTIFICATE TITLE</label>
+                    <input type="text" id="edit-cert-title" class="form-control" required placeholder="e.g. Google Cloud AI Engineer">
+                </div>
+                <div class="form-row">
+                    <label>ISSUING ORGANIZATION</label>
+                    <input type="text" id="edit-cert-issuer" class="form-control" required placeholder="e.g. Google / Coursera">
+                </div>
+                <div class="form-row">
+                    <label>CATEGORY</label>
+                    <select id="edit-cert-category" class="form-control">
+                        <option value="ai">AI & Machine Learning</option>
+                        <option value="cyber">Cybersecurity & Defense</option>
+                        <option value="competition">National Competitions</option>
+                        <option value="web">Web & Design</option>
+                        <option value="workshop">Workshops & Summits</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label>BADGE / TAG</label>
+                    <input type="text" id="edit-cert-badge" class="form-control" required placeholder="e.g. SPECIALIZATION / 1ST PLACE">
+                </div>
+                <div class="form-row">
+                    <label>DATE ISSUED</label>
+                    <input type="text" id="edit-cert-date" class="form-control" required placeholder="e.g. Nov 2026">
+                </div>
+                <div class="form-row">
+                    <label>IMAGE URL / PATH</label>
+                    <input type="text" id="edit-cert-img" class="form-control" required placeholder="e.g. certificates/cert-01.png">
+                </div>
+                <div class="form-row">
+                    <label>VERIFICATION LINK (OPTIONAL)</label>
+                    <input type="url" id="edit-cert-verify" class="form-control" placeholder="https://coursera.org/verify/...">
+                </div>
+                <div class="form-row">
+                    <label>DESCRIPTION</label>
+                    <textarea id="edit-cert-desc" class="form-control" rows="3" required placeholder="Key skills learned..."></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                    <button type="button" class="admin-btn-outline" id="cancel-cert-edit">Cancel</button>
+                    <button type="submit" class="admin-btn-primary">Save Certificate</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Skill Add/Edit Modal -->
+    <div class="editor-modal" id="skill-editor-modal">
+        <div class="editor-modal-card">
+            <h3 id="skill-modal-header" style="color: #fff; margin-bottom: 20px;">Add New Skill</h3>
+            <form id="skill-edit-form">
+                <input type="hidden" id="edit-skill-index">
+                <div class="form-row">
+                    <label>SKILL NAME</label>
+                    <input type="text" id="edit-skill-name" class="form-control" required placeholder="e.g. Deep Learning & Transformers">
+                </div>
+                <div class="form-row">
+                    <label>ICON (FONT AWESOME CLASS)</label>
+                    <input type="text" id="edit-skill-icon" class="form-control" required placeholder="e.g. fas fa-brain">
+                </div>
+                <div class="form-row">
+                    <label>PROFICIENCY PERCENTAGE (1 - 100)</label>
+                    <input type="number" id="edit-skill-level" min="1" max="100" class="form-control" required placeholder="95">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                    <button type="button" class="admin-btn-outline" id="cancel-skill-edit">Cancel</button>
+                    <button type="submit" class="admin-btn-primary">Save Skill</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ML Intent Modal -->
+    <div class="editor-modal" id="ml-editor-modal">
+        <div class="editor-modal-card">
+            <h3 style="color: #fff; margin-bottom: 20px;">Add NLP Training Intent</h3>
+            <form id="ml-edit-form">
+                <div class="form-row">
+                    <label>INTENT IDENTIFIER</label>
+                    <input type="text" id="ml-intent-name" class="form-control" required placeholder="e.g. research_internships">
+                </div>
+                <div class="form-row">
+                    <label>SAMPLE USER QUERIES (COMMA SEPARATED)</label>
+                    <textarea id="ml-queries" class="form-control" rows="3" required placeholder="e.g. are you open for internships, how can i hire you, internship availability"></textarea>
+                </div>
+                <div class="form-row">
+                    <label>AI RESPONSE</label>
+                    <textarea id="ml-response" class="form-control" rows="3" required placeholder="The exact intelligent answer Atharva's AI should return..."></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                    <button type="button" class="admin-btn-outline" id="cancel-ml-edit">Cancel</button>
+                    <button type="submit" class="admin-btn-primary">Train Neural Model</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CLI Command Modal -->
+    <div class="editor-modal" id="cli-cmd-modal">
+        <div class="editor-modal-card">
+            <h3 style="color: #fff; margin-bottom: 20px;">Add Custom Terminal Command</h3>
+            <form id="cli-cmd-form">
+                <div class="form-row">
+                    <label>COMMAND NAME (LOWERCASE, NO SPACES)</label>
+                    <input type="text" id="cli-cmd-name" class="form-control" required placeholder="e.g. awards or github">
+                </div>
+                <div class="form-row">
+                    <label>COMMAND OUTPUT</label>
+                    <textarea id="cli-cmd-output" class="form-control" rows="3" required placeholder="Text displayed when user types this command in terminal..."></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                    <button type="button" class="admin-btn-outline" id="cancel-cli-cmd-edit">Cancel</button>
+                    <button type="submit" class="admin-btn-primary">Save Command</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../data/portfolio-data.js"></script>
+    <script src="../assets/js/ml-brain.js"></script>
+    <script type="module">
+        import { auth, signInWithEmailAndPassword } from '../assets/js/firebase-auth.js';
+
+        // Cryptographic SHA-256 helper
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // Defensive HTML sanitization and URL validation for Admin UI
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function safeUrl(url) {
+            if (!url || typeof url !== 'string') return '#';
+            const trimmed = url.trim();
+            if (/^(#[a-zA-Z0-9_-]+|\/[^/\\]|\.\/|\.\.\/|https?:\/\/|mailto:[^@\s]+@[^@\s]+|tel:[+0-9-]+)/i.test(trimmed)) {
+                if (!/^(javascript:|vbscript:|data:)/i.test(trimmed)) {
+                    return trimmed.replace(/[<>"']/g, '');
+                }
+            }
+            return '#';
+        }
+
+        // Initialize default hash strictly if not set
+        const DEFAULT_HASH = "80f86d8b6c433364f33198a28ce1994625b0453303666d9fa2472ec4325a7ca8"; // hash of 'atharva2026'
+
+        const authForm = document.getElementById('auth-form');
+        const authScreen = document.getElementById('auth-screen');
+        const adminDashboard = document.getElementById('admin-dashboard');
+        const authErr = document.getElementById('auth-err');
+
+        // Check active session or Remember Me
+        if (sessionStorage.getItem('PORT2_ADMIN_AUTH') === 'true' || localStorage.getItem('PORT2_REMEMBER_ADMIN') === 'true') {
+            sessionStorage.setItem('PORT2_ADMIN_AUTH', 'true');
+            authScreen.style.display = 'none';
+            adminDashboard.style.display = 'block';
+            loadAdminData();
+        }
+
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            authErr.textContent = '';
+            const email = document.getElementById('admin-email').value.trim();
+            const pass = document.getElementById('admin-pass').value.trim();
+            const rememberMe = document.getElementById('remember-me-checkbox').checked;
+
+            // 1. If email is provided, attempt Firebase Authentication
+            if (email) {
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                    sessionStorage.setItem('PORT2_ADMIN_AUTH', 'true');
+                    sessionStorage.setItem('FIREBASE_AUTH_ACTIVE', 'true');
+                    if (rememberMe) {
+                        localStorage.setItem('PORT2_REMEMBER_ADMIN', 'true');
+                    }
+                    authScreen.style.display = 'none';
+                    adminDashboard.style.display = 'block';
+                    loadAdminData();
+                    return;
+                } catch (err) {
+                    console.warn("Firebase Auth error:", err);
+                    authErr.textContent = "Firebase Auth: " + err.message;
+                    return;
+                }
+            }
+
+            // 2. Passphrase check against custom hash or default
+            const inputHash = await sha256(pass);
+            const customHash = localStorage.getItem('PORT2_ADMIN_PASS_HASH');
+
+            // STRICT SECURITY: If a custom password has been set, the old default 'atharva2026' is BLOCKED!
+            let isAuthenticated = false;
+            if (customHash) {
+                isAuthenticated = (inputHash === customHash);
+            } else {
+                isAuthenticated = (inputHash === DEFAULT_HASH);
+            }
+
+            if (isAuthenticated) {
+                sessionStorage.setItem('PORT2_ADMIN_AUTH', 'true');
+                if (rememberMe) {
+                    localStorage.setItem('PORT2_REMEMBER_ADMIN', 'true');
+                } else {
+                    localStorage.removeItem('PORT2_REMEMBER_ADMIN');
+                }
+                authScreen.style.display = 'none';
+                adminDashboard.style.display = 'block';
+                loadAdminData();
+            } else {
+                authErr.textContent = "INCORRECT PASSPHRASE. ACCESS DENIED.";
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            sessionStorage.removeItem('PORT2_ADMIN_AUTH');
+            sessionStorage.removeItem('FIREBASE_AUTH_ACTIVE');
+            localStorage.removeItem('PORT2_REMEMBER_ADMIN');
+            location.reload();
+        });
+
+        // Tab Navigation
+        const tabs = document.querySelectorAll('.admin-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                document.querySelectorAll('.tab-pane').forEach(p => p.style.display = 'none');
+                document.getElementById('pane-' + tab.dataset.tab).style.display = 'block';
+                if (tab.dataset.tab === 'ml') renderMLIntents();
+            });
+        });
+
+        // Data Rendering
+        let currentData = getActivePortfolioData();
+
+        function loadAdminData() {
+            currentData = getActivePortfolioData();
+            document.getElementById('certs-count').textContent = currentData.certificates.length;
+            document.getElementById('skills-count').textContent = currentData.skills.length;
+            renderAdminCerts();
+            renderAdminSkills();
+            renderMLIntents();
+            loadIdentityFields();
+            renderAdminMenus();
+            renderAdminSections();
+            loadAppearanceSettings();
+
+            const savedKey = localStorage.getItem('PORTFOLIO_WEB3FORMS_KEY') || (currentData.profile && currentData.profile.web3FormsKey) || '';
+            document.getElementById('setting-web3-key').value = savedKey;
+        }
+
+        // ==================== NAVIGATION MENUS MANAGER ====================
+        function renderAdminMenus() {
+            const grid = document.getElementById('admin-menus-grid');
+            if (!grid || !currentData.navigation) return;
+            grid.innerHTML = '';
+
+            currentData.navigation.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'admin-item-card';
+                const iconSafe = escapeHtml(item.icon).replace(/[^a-zA-Z0-9\s-]/g, '');
+                card.innerHTML = `
+                    <div class="admin-item-header">
+                        <span>#${idx+1} [MENU ITEM]</span>
+                        <span>${item.visible !== false ? '<strong style="color:#10b981;">VISIBLE</strong>' : '<span style="color:#f43f5e;">HIDDEN</span>'}</span>
+                    </div>
+                    <div class="admin-item-title"><i class="${iconSafe}"></i> ${escapeHtml(item.label)}</div>
+                    <div style="font-size:11px; color:#06b6d4; font-family:monospace;">Target: ${escapeHtml(item.target)}</div>
+                    <div class="admin-item-footer">
+                        <button class="btn-sm-edit" onclick="toggleMenuVisibility(${idx})"><i class="fas fa-eye"></i> Toggle</button>
+                        <button class="btn-sm-del" onclick="deleteMenuItem(${idx})"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        window.toggleMenuVisibility = function(idx) {
+            currentData.navigation[idx].visible = currentData.navigation[idx].visible === false ? true : false;
+            saveActivePortfolioData(currentData);
+            renderAdminMenus();
+        };
+
+        window.deleteMenuItem = function(idx) {
+            if (confirm("Delete this navigation menu link?")) {
+                currentData.navigation.splice(idx, 1);
+                saveActivePortfolioData(currentData);
+                renderAdminMenus();
+            }
+        };
+
+        document.getElementById('add-menu-item-btn').addEventListener('click', () => {
+            const label = prompt("Enter Menu Item Label (e.g. 'Articles' or 'Speaking'):");
+            if (!label) return;
+            const target = prompt("Enter Target Anchor (e.g. '#articles' or URL):", "#" + label.toLowerCase().replace(/\s+/g, '-'));
+            if (!target) return;
+            const icon = prompt("Enter FontAwesome icon class (e.g. 'fas fa-newspaper'):", "fas fa-link");
+
+            currentData.navigation.push({
+                id: "nav_" + Date.now(),
+                label: label.trim(),
+                target: target.trim(),
+                icon: icon ? icon.trim() : "fas fa-link",
+                visible: true
+            });
+            saveActivePortfolioData(currentData);
+            renderAdminMenus();
+        });
+
+        // ==================== APPEARANCE & THEME CUSTOMIZER ====================
+        function loadAppearanceSettings() {
+            if (!currentData.appearance) return;
+            document.getElementById('theme-primary-color').value = currentData.appearance.primaryColor || '#06b6d4';
+            document.getElementById('theme-secondary-color').value = currentData.appearance.secondaryColor || '#10b981';
+            document.getElementById('theme-accent-color').value = currentData.appearance.accentColor || '#8b5cf6';
+            document.getElementById('theme-card-radius').value = currentData.appearance.cardBorderRadius || '24px';
+            document.getElementById('theme-custom-css').value = currentData.appearance.customCss || '';
+        }
+
+        document.getElementById('save-appearance-btn').addEventListener('click', () => {
+            if (!currentData.appearance) currentData.appearance = {};
+            currentData.appearance.primaryColor = document.getElementById('theme-primary-color').value;
+            currentData.appearance.secondaryColor = document.getElementById('theme-secondary-color').value;
+            currentData.appearance.accentColor = document.getElementById('theme-accent-color').value;
+            currentData.appearance.cardBorderRadius = document.getElementById('theme-card-radius').value;
+            currentData.appearance.customCss = document.getElementById('theme-custom-css').value;
+
+            saveActivePortfolioData(currentData);
+            const fb = document.getElementById('appearance-feedback');
+            fb.textContent = "Appearance styling saved & applied live to website!";
+            setTimeout(() => fb.textContent = '', 3500);
+        });
+
+        // ==================== SECTIONS VISIBILITY MANAGER ====================
+        function renderAdminSections() {
+            const grid = document.getElementById('admin-sections-grid');
+            if (!grid || !currentData.sections) return;
+            grid.innerHTML = '';
+
+            currentData.sections.forEach((sec, idx) => {
+                const card = document.createElement('div');
+                card.className = 'admin-item-card';
+                card.innerHTML = `
+                    <div class="admin-item-header">
+                        <span>BLOCK #${idx+1}</span>
+                        <span>${sec.visible ? '<strong style="color:#10b981;">ENABLED</strong>' : '<span style="color:#f43f5e;">DISABLED</span>'}</span>
+                    </div>
+                    <div class="admin-item-title">${sec.name}</div>
+                    <div style="font-size:11px; color:#94a3b8; font-family:monospace;">ID: #${sec.id}</div>
+                    <div class="admin-item-footer">
+                        <button class="btn-sm-edit" onclick="toggleSectionVisibility(${idx})">
+                            <i class="fas fa-${sec.visible ? 'eye-slash' : 'eye'}"></i> ${sec.visible ? 'Hide Section' : 'Show Section'}
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        window.toggleSectionVisibility = function(idx) {
+            currentData.sections[idx].visible = !currentData.sections[idx].visible;
+            saveActivePortfolioData(currentData);
+            renderAdminSections();
+        };
+
+        document.getElementById('save-sections-btn').addEventListener('click', () => {
+            saveActivePortfolioData(currentData);
+            const fb = document.getElementById('sections-feedback');
+            fb.textContent = "Section layout saved successfully!";
+            setTimeout(() => fb.textContent = '', 3000);
+        });
+
+        function loadIdentityFields() {
+            const blocksData = JSON.parse(localStorage.getItem('ATHARVA_PORTFOLIO_PAGE_BLOCKS') || '{}');
+            
+            document.getElementById('id-brand-name').value = blocksData['brand_name'] ? blocksData['brand_name'].replace(/<[^>]*>/g, '') : "atharva.ai";
+            document.getElementById('id-first-name').value = blocksData['hero_first_name'] ? blocksData['hero_first_name'].replace(/<[^>]*>/g, '') : "ATHARVA";
+            document.getElementById('id-last-name').value = blocksData['hero_last_name'] ? blocksData['hero_last_name'].replace(/<[^>]*>/g, '') : "AGRAWAL";
+            document.getElementById('id-header-badge').value = blocksData['hero_badge_text'] ? blocksData['hero_badge_text'].replace(/<[^>]*>/g, '') : "NEXT-GEN AUTONOMOUS INNOVATOR & STUDENT RESEARCHER";
+            document.getElementById('id-bio-text').value = blocksData['hero_bio_text'] ? blocksData['hero_bio_text'].replace(/<[^>]*>/g, '') : (currentData.profile && currentData.profile.title) || "";
+            
+            if (currentData.profile && currentData.profile.socials) {
+                document.getElementById('id-soc-insta').value = currentData.profile.socials.instagram || '';
+                document.getElementById('id-soc-linkedin').value = currentData.profile.socials.linkedin || '';
+                document.getElementById('id-soc-github').value = currentData.profile.socials.github || '';
+                document.getElementById('id-soc-twitter').value = currentData.profile.socials.twitter || '';
+            }
+        }
+
+        document.getElementById('save-identity-btn').addEventListener('click', () => {
+            const blocksData = JSON.parse(localStorage.getItem('ATHARVA_PORTFOLIO_PAGE_BLOCKS') || '{}');
+            
+            const brandName = document.getElementById('id-brand-name').value.trim();
+            if (brandName) blocksData['brand_name'] = brandName;
+
+            const firstName = document.getElementById('id-first-name').value.trim();
+            if (firstName) blocksData['hero_first_name'] = firstName;
+
+            const lastName = document.getElementById('id-last-name').value.trim();
+            if (lastName) blocksData['hero_last_name'] = lastName;
+
+            const badgeText = document.getElementById('id-header-badge').value.trim();
+            if (badgeText) blocksData['hero_badge_text'] = badgeText;
+
+            const bioText = document.getElementById('id-bio-text').value.trim();
+            if (bioText) blocksData['hero_bio_text'] = bioText;
+
+            // Handle photo upload
+            const photoFile = document.getElementById('id-photo-file').files[0];
+            const photoUrl = document.getElementById('id-photo-url').value.trim();
+
+            if (photoFile) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    blocksData['profile_avatar_img'] = e.target.result;
+                    localStorage.setItem('ATHARVA_PORTFOLIO_PAGE_BLOCKS', JSON.stringify(blocksData));
+                    finishSavingIdentity();
+                };
+                reader.readAsDataURL(photoFile);
+                return;
+            } else if (photoUrl) {
+                blocksData['profile_avatar_img'] = photoUrl;
+            }
+
+            localStorage.setItem('ATHARVA_PORTFOLIO_PAGE_BLOCKS', JSON.stringify(blocksData));
+            finishSavingIdentity();
+        });
+
+        function finishSavingIdentity() {
+            // Update profile socials
+            if (!currentData.profile) currentData.profile = {};
+            if (!currentData.profile.socials) currentData.profile.socials = {};
+            currentData.profile.socials.instagram = document.getElementById('id-soc-insta').value.trim();
+            currentData.profile.socials.linkedin = document.getElementById('id-soc-linkedin').value.trim();
+            currentData.profile.socials.github = document.getElementById('id-soc-github').value.trim();
+            currentData.profile.socials.twitter = document.getElementById('id-soc-twitter').value.trim();
+            saveActivePortfolioData(currentData);
+
+            const fb = document.getElementById('identity-feedback');
+            fb.textContent = "Identity changes saved & applied live to website!";
+            setTimeout(() => fb.textContent = '', 3500);
+        }
+
+        function renderAdminCerts() {
+            const grid = document.getElementById('admin-certs-grid');
+            grid.innerHTML = '';
+            currentData.certificates.forEach((cert, idx) => {
+                const card = document.createElement('div');
+                card.className = 'admin-item-card';
+                card.innerHTML = `
+                    <div class="admin-item-header">
+                        <span>#${idx+1} [${escapeHtml(cert.category).toUpperCase()}]</span>
+                        <span>${escapeHtml(cert.badge)}</span>
+                    </div>
+                    <div class="admin-item-title">${escapeHtml(cert.title)}</div>
+                    <div style="font-size: 11px; color: #06b6d4;">${escapeHtml(cert.issuer)} • ${escapeHtml(cert.date)}</div>
+                    <div class="admin-item-desc">${escapeHtml(cert.description)}</div>
+                    <div class="admin-item-footer">
+                        <button class="btn-sm-edit" onclick="editCert('${escapeHtml(cert.id)}')"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn-sm-del" onclick="deleteCert('${escapeHtml(cert.id)}')"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderAdminSkills() {
+            const grid = document.getElementById('admin-skills-grid');
+            grid.innerHTML = '';
+            currentData.skills.forEach((skill, idx) => {
+                const card = document.createElement('div');
+                card.className = 'admin-item-card';
+                const iconSafe = escapeHtml(skill.icon).replace(/[^a-zA-Z0-9\s-]/g, '');
+                card.innerHTML = `
+                    <div class="admin-item-header">
+                        <span>#${idx+1}</span>
+                        <span>${parseInt(skill.level) || 0}%</span>
+                    </div>
+                    <div class="admin-item-title"><i class="${iconSafe}"></i> ${escapeHtml(skill.name)}</div>
+                    <div class="admin-item-footer">
+                        <button class="btn-sm-edit" onclick="editSkill(${idx})"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn-sm-del" onclick="deleteSkill(${idx})"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderMLIntents() {
+            const grid = document.getElementById('admin-ml-grid');
+            if (!grid || !window.PortfolioML) return;
+            grid.innerHTML = '';
+
+            window.PortfolioML.trainingCorpus.forEach(doc => {
+                const card = document.createElement('div');
+                card.className = 'admin-item-card';
+                const queriesSafe = (doc.queries || []).slice(0, 3).map(q => escapeHtml(q)).join('", "');
+                card.innerHTML = `
+                    <div class="admin-item-header">
+                        <span>INTENT: ${escapeHtml(doc.intent).toUpperCase()}</span>
+                        <span>${(doc.queries || []).length} TRAINED PHRASES</span>
+                    </div>
+                    <div style="font-size: 11px; color: #94a3b8;"><strong>Sample Queries:</strong> "${queriesSafe}"</div>
+                    <div class="admin-item-desc" style="background: rgba(3,7,18,0.7); padding: 8px; border-radius: 6px; font-family: monospace;">${escapeHtml(doc.response)}</div>
+                    <div class="admin-item-footer">
+                        <button class="btn-sm-del" onclick="deleteMLIntent('${escapeHtml(doc.intent)}')"><i class="fas fa-trash"></i> Delete Intent</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            renderCliCommands();
+        }
+
+        function renderCliCommands() {
+            const grid = document.getElementById('admin-cli-cmds-grid');
+            if (!grid || !window.PortfolioML) return;
+            grid.innerHTML = '';
+
+            const cmds = window.PortfolioML.customCommands || {};
+            for (const [cmdName, cmdOutput] of Object.entries(cmds)) {
+                const card = document.createElement('div');
+                card.className = 'admin-item-card';
+                card.innerHTML = `
+                    <div class="admin-item-header">
+                        <span style="color: #10b981;">COMMAND: ${escapeHtml(cmdName)}</span>
+                        <span>CLI SHELL</span>
+                    </div>
+                    <div class="admin-item-desc" style="background: rgba(3,7,18,0.7); padding: 8px; border-radius: 6px; font-family: monospace;">${escapeHtml(cmdOutput)}</div>
+                    <div class="admin-item-footer">
+                        <button class="btn-sm-del" onclick="deleteCliCmd('${escapeHtml(cmdName)}')"><i class="fas fa-trash"></i> Delete Command</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+        }
+
+        // Custom CLI Command Modals
+        const cliCmdModal = document.getElementById('cli-cmd-modal');
+        document.getElementById('add-cli-cmd-btn').addEventListener('click', () => {
+            cliCmdModal.classList.add('active');
+        });
+        document.getElementById('cancel-cli-cmd-edit').addEventListener('click', () => {
+            cliCmdModal.classList.remove('active');
+        });
+        document.getElementById('cli-cmd-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('cli-cmd-name').value.trim();
+            const output = document.getElementById('cli-cmd-output').value.trim();
+            window.PortfolioML.setCustomCommand(name, output);
+            cliCmdModal.classList.remove('active');
+            renderCliCommands();
+        });
+
+        window.deleteCliCmd = function(name) {
+            if (confirm(`Delete terminal command '${name}'?`)) {
+                window.PortfolioML.deleteCustomCommand(name);
+                renderCliCommands();
+            }
+        };
+
+        // ML Intent Addition Modal
+        const mlModal = document.getElementById('ml-editor-modal');
+        document.getElementById('add-ml-intent-btn').addEventListener('click', () => {
+            mlModal.classList.add('active');
+        });
+        document.getElementById('cancel-ml-edit').addEventListener('click', () => {
+            mlModal.classList.remove('active');
+        });
+        document.getElementById('ml-edit-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const intentName = document.getElementById('ml-intent-name').value.trim();
+            const queries = document.getElementById('ml-queries').value.split(',').map(q => q.trim());
+            const responseText = document.getElementById('ml-response').value.trim();
+
+            window.PortfolioML.addTrainingIntent(intentName, queries, responseText);
+            mlModal.classList.remove('active');
+            renderMLIntents();
+        });
+
+        window.deleteMLIntent = function(intentName) {
+            if (confirm(`Delete intent '${intentName}' from neural training corpus?`)) {
+                window.PortfolioML.deleteTrainingIntent(intentName);
+                renderMLIntents();
+            }
+        };
+
+        // Certificate Operations
+        const certModal = document.getElementById('cert-editor-modal');
+        document.getElementById('add-cert-btn').addEventListener('click', () => {
+            document.getElementById('cert-modal-header').textContent = "Add New Certificate";
+            document.getElementById('edit-cert-id').value = "cert_" + Date.now();
+            document.getElementById('edit-cert-title').value = '';
+            document.getElementById('edit-cert-issuer').value = '';
+            document.getElementById('edit-cert-badge').value = '';
+            document.getElementById('edit-cert-date').value = '';
+            document.getElementById('edit-cert-img').value = 'certificates/cert-placeholder.jpg';
+            document.getElementById('edit-cert-verify').value = '';
+            document.getElementById('edit-cert-desc').value = '';
+            certModal.classList.add('active');
+        });
+
+        document.getElementById('cancel-cert-edit').addEventListener('click', () => {
+            certModal.classList.remove('active');
+        });
+
+        document.getElementById('cert-edit-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-cert-id').value;
+            const newCert = {
+                id: id,
+                title: document.getElementById('edit-cert-title').value,
+                issuer: document.getElementById('edit-cert-issuer').value,
+                category: document.getElementById('edit-cert-category').value,
+                badge: document.getElementById('edit-cert-badge').value,
+                date: document.getElementById('edit-cert-date').value,
+                image: document.getElementById('edit-cert-img').value,
+                verifyUrl: document.getElementById('edit-cert-verify').value,
+                description: document.getElementById('edit-cert-desc').value
+            };
+
+            const existingIdx = currentData.certificates.findIndex(c => c.id === id);
+            if (existingIdx >= 0) {
+                currentData.certificates[existingIdx] = newCert;
+            } else {
+                currentData.certificates.unshift(newCert);
+            }
+
+            saveActivePortfolioData(currentData);
+            certModal.classList.remove('active');
+            loadAdminData();
+        });
+
+        window.editCert = function(id) {
+            const cert = currentData.certificates.find(c => c.id === id);
+            if (!cert) return;
+            document.getElementById('cert-modal-header').textContent = "Edit Certificate";
+            document.getElementById('edit-cert-id').value = cert.id;
+            document.getElementById('edit-cert-title').value = cert.title;
+            document.getElementById('edit-cert-issuer').value = cert.issuer;
+            document.getElementById('edit-cert-category').value = cert.category;
+            document.getElementById('edit-cert-badge').value = cert.badge;
+            document.getElementById('edit-cert-date').value = cert.date;
+            document.getElementById('edit-cert-img').value = cert.image;
+            document.getElementById('edit-cert-verify').value = cert.verifyUrl || '';
+            document.getElementById('edit-cert-desc').value = cert.description;
+            certModal.classList.add('active');
+        };
+
+        window.deleteCert = function(id) {
+            if (confirm("Are you sure you want to delete this certificate?")) {
+                currentData.certificates = currentData.certificates.filter(c => c.id !== id);
+                saveActivePortfolioData(currentData);
+                loadAdminData();
+            }
+        };
+
+        // Skill Operations
+        const skillModal = document.getElementById('skill-editor-modal');
+        document.getElementById('add-skill-btn').addEventListener('click', () => {
+            document.getElementById('skill-modal-header').textContent = "Add New Skill";
+            document.getElementById('edit-skill-index').value = "-1";
+            document.getElementById('edit-skill-name').value = '';
+            document.getElementById('edit-skill-icon').value = 'fas fa-code';
+            document.getElementById('edit-skill-level').value = '90';
+            skillModal.classList.add('active');
+        });
+
+        document.getElementById('cancel-skill-edit').addEventListener('click', () => {
+            skillModal.classList.remove('active');
+        });
+
+        document.getElementById('skill-edit-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const idx = parseInt(document.getElementById('edit-skill-index').value);
+            const newSkill = {
+                name: document.getElementById('edit-skill-name').value,
+                icon: document.getElementById('edit-skill-icon').value,
+                level: parseInt(document.getElementById('edit-skill-level').value)
+            };
+
+            if (idx >= 0) {
+                currentData.skills[idx] = newSkill;
+            } else {
+                currentData.skills.push(newSkill);
+            }
+
+            saveActivePortfolioData(currentData);
+            skillModal.classList.remove('active');
+            loadAdminData();
+        });
+
+        window.editSkill = function(idx) {
+            const skill = currentData.skills[idx];
+            if (!skill) return;
+            document.getElementById('skill-modal-header').textContent = "Edit Skill";
+            document.getElementById('edit-skill-index').value = idx;
+            document.getElementById('edit-skill-name').value = skill.name;
+            document.getElementById('edit-skill-icon').value = skill.icon;
+            document.getElementById('edit-skill-level').value = skill.level;
+            skillModal.classList.add('active');
+        };
+
+        window.deleteSkill = function(idx) {
+            if (confirm("Are you sure you want to delete this skill?")) {
+                currentData.skills.splice(idx, 1);
+                saveActivePortfolioData(currentData);
+                loadAdminData();
+            }
+        };
+
+        // Save Settings & Password
+        document.getElementById('save-settings-btn').addEventListener('click', async () => {
+            const newKey = document.getElementById('setting-web3-key').value.trim();
+            if (newKey) {
+                localStorage.setItem('PORTFOLIO_WEB3FORMS_KEY', newKey);
+            }
+
+            const newPass = document.getElementById('setting-new-pass').value.trim();
+            if (newPass) {
+                const newHash = await sha256(newPass);
+                localStorage.setItem('PORT2_ADMIN_PASS_HASH', newHash);
+            }
+
+            const fb = document.getElementById('settings-feedback');
+            fb.textContent = "Configuration saved successfully!";
+            setTimeout(() => fb.textContent = '', 3000);
+        });
+
+        // Export data.js
+        document.getElementById('export-json-btn').addEventListener('click', () => {
+            const fileContent = "/* Updated Atharva Agrawal Portfolio Data */\nconst PORTFOLIO_DATA = " + JSON.stringify(currentData, null, 4) + ";\n\nfunction getActivePortfolioData() {\n    const saved = localStorage.getItem('ATHARVA_PORTFOLIO_CUSTOM_DATA');\n    if (saved) return JSON.parse(saved);\n    return PORTFOLIO_DATA;\n}\nfunction saveActivePortfolioData(data) {\n    localStorage.setItem('ATHARVA_PORTFOLIO_CUSTOM_DATA', JSON.stringify(data));\n}";
+            const blob = new Blob([fileContent], { type: 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'portfolio-data.js';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>
