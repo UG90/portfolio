@@ -527,10 +527,19 @@ function getActivePortfolioData() {
     if (saved) {
         try {
             const parsed = sanitizeDataPayload(JSON.parse(saved));
-            // Merge defaults to ensure newly added properties (navigation, appearance, sections) are always available
+            // Merge new default certificates & skills if localStorage had an older snapshot
+            let mergedCerts = Array.isArray(parsed.certificates) ? parsed.certificates : PORTFOLIO_DATA.certificates;
+            if (Array.isArray(parsed.certificates)) {
+                const existingIds = new Set(parsed.certificates.map(c => c.id));
+                const missingDefaults = PORTFOLIO_DATA.certificates.filter(c => !existingIds.has(c.id));
+                if (missingDefaults.length > 0) {
+                    mergedCerts = [...parsed.certificates, ...missingDefaults];
+                }
+            }
             return {
                 ...PORTFOLIO_DATA,
                 ...parsed,
+                certificates: mergedCerts,
                 profile: { ...PORTFOLIO_DATA.profile, ...(parsed.profile || {}) },
                 linkedinSync: { ...PORTFOLIO_DATA.linkedinSync, ...(parsed.linkedinSync || {}) },
                 appearance: { ...PORTFOLIO_DATA.appearance, ...(parsed.appearance || {}) },
