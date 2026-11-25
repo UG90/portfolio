@@ -62,13 +62,14 @@ const PORTFOLIO_DATA = {
 
     // 5. Skills Matrix
     skills: [
-        { name: "LLMs & GenAI", icon: "fas fa-brain", level: 95, category: "ai" },
-        { name: "Network Security", icon: "fas fa-network-wired", level: 90, category: "cyber" },
-        { name: "Threat Defense", icon: "fas fa-shield-virus", level: 92, category: "cyber" },
+        { name: "LLMs, Vibe-Coding & GenAI", icon: "fas fa-brain", level: 96, category: "ai" },
+        { name: "Network Security & Cyber Defense", icon: "fas fa-shield-virus", level: 92, category: "cyber" },
+        { name: "VFX & Adobe Creative Cloud Pro", icon: "fas fa-film", level: 93, category: "design" },
+        { name: "Graphic, Brand & Canva Pro (13 Courses)", icon: "fas fa-palette", level: 95, category: "design" },
         { name: "Full-Stack Web (JS/HTML/CSS)", icon: "fas fa-code", level: 90, category: "web" },
-        { name: "UI/UX & Visual Design (Canva Pro)", icon: "fas fa-palette", level: 94, category: "design" },
-        { name: "Data Analytics (Excel/Logic)", icon: "fas fa-chart-line", level: 85, category: "data" },
-        { name: "Youth Diplomacy & Policy", icon: "fas fa-microphone-alt", level: 91, category: "leadership" }
+        { name: "Video & Social Media Content Creation", icon: "fas fa-video", level: 91, category: "design" },
+        { name: "Data Analytics & ML Video Datasets", icon: "fas fa-chart-line", level: 88, category: "data" },
+        { name: "Youth Diplomacy & Responsible AI", icon: "fas fa-microphone-alt", level: 92, category: "leadership" }
     ],
 
     // 6. 24+ Verified Certificates & Credentials

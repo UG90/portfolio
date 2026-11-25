@@ -126,9 +126,25 @@ class PortfolioMLEngine {
             {
                 intent: "tech_stack",
                 queries: [
-                    "what is your tech stack", "tools you use", "technologies", "programming languages", "frameworks"
+                    "what is your tech stack", "tools you use", "technologies", "programming languages", "frameworks",
+                    "adobe", "vfx", "creative cloud", "video editing", "design"
                 ],
-                response: "Atharva's tool stack spans Generative AI Studio, Prompt Chaining pipelines, Claude artifacts, Python, Semantic HTML5/CSS3, Modern Vanilla JS, WordPress Headless CMS, and Canva Pro Design Suite."
+                response: "Atharva's multidisciplinary stack spans Generative AI Studio, Claude artifacts, Vibe-Coding, ML video datasets, Python, Semantic HTML5/CSS3, Vanilla JS, Adobe Creative Cloud Pro (VFX & Video), and Canva Pro (13-Course Specialization in Branding, Typography, Color Theory & Content Creation)."
+            },
+            {
+                intent: "creative_vfx_design",
+                queries: [
+                    "vfx", "adobe creative cloud", "canva essentials", "graphic design", "video creation",
+                    "presentation mastery", "social media design", "branding", "creative"
+                ],
+                response: "Beyond AI & Cybersecurity, Atharva is a creative visual designer and VFX creator using Adobe Creative Cloud Pro and holds the 13-course Canva Essentials Professional Certificate (Typography, Color Theory, Branding, Video & Social Media Content Creation, Presentation Mastery)."
+            },
+            {
+                intent: "ai_sashakt",
+                queries: [
+                    "ai sashakt", "meity", "indiaai", "intel india", "responsible ai", "pledge"
+                ],
+                response: "Atharva took the national AI Sashakt Responsible AI Pledge (Feb 2026) alongside MeitY, IndiaAI, and Intel India, advocating for ethical, safe, and inclusive AI development."
             },
             {
                 intent: "contact_socials",
