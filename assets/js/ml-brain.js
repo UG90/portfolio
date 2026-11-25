@@ -30,10 +30,10 @@ class PortfolioMLEngine {
             }
         } else {
             this.customCommands = {
-                "skills": "AI/ML (95%), Network Defense (92%), Web Architecture (90%), Canva Pro (94%), Data Analytics (85%)",
-                "certs": "24+ Verified credentials from Google, Coursera, NIT Raipur, IIT Bombay, and Simplilearn",
-                "achievements": "Mindspark Web Dev (1st Place Gold), VVM National Level-I Merit, World Teen Parliament Influencer",
-                "contact": "Location: Raipur, Chhattisgarh | Instagram: @atharva.agrawal8 | LinkedIn: in/atharvaagrawal8",
+                "skills": "43 Verified LinkedIn Skills: AI/GenAI, Robotics & Embedded (RPi, ESP, Arduino, C++, Python), 3D/VFX (Maya, Unreal, Nuke, DaVinci, Adobe CC), Cybersecurity (Linux, SQL, Ethical Hacking), Startup Leadership",
+                "certs": "31+ Verified credentials from Google, Coursera, Arena Animation, NIT Raipur, IIT Bombay, IIM Indore, and Simplilearn",
+                "achievements": "Co-Founder @ Smart Retinoscope, Arena VFX Certified, Mindspark Web Dev (Runner-Up), VVM National Level-I, World Teen Parliament MP (4WTP), Health Quiz 1st Place",
+                "contact": "Email: atharvaagrawal8@gmail.com | Raipur, India | IG: @atharva.agrawal8 | LI: in/atharvaagrawal8 | GH: github.com/UG90",
                 "whoami": "Guest operative inspecting Atharva Agrawal's Neural System Core"
             };
         }
@@ -147,11 +147,32 @@ class PortfolioMLEngine {
                 response: "Atharva took the national AI Sashakt Responsible AI Pledge (Feb 2026) alongside MeitY, IndiaAI, and Intel India, advocating for ethical, safe, and inclusive AI development."
             },
             {
+                intent: "smart_retinoscope",
+                queries: [
+                    "smart retinoscope", "startup", "co-founder", "founder", "venture", "medtech", "company"
+                ],
+                response: "Atharva is the Co-Founder of The Smart Retinoscope (Oct 2026–Present), a hardware-AI MedTech startup in Raipur uniting Startup Leadership with embedded engineering and computer vision."
+            },
+            {
+                intent: "robotics_embedded",
+                queries: [
+                    "robotics", "raspberry pi", "esp", "esp32", "arduino", "embedded", "hardware", "c++", "python", "model making", "revit", "srijan"
+                ],
+                response: "Atharva builds robotics and embedded hardware systems using Raspberry Pi, ESP, Arduino, C++, Python, and Revit. He is a member of the Brighton International School Robotics Team (since 2017) and exhibited Model Making at Anjaneya University SRIJAN 5.0."
+            },
+            {
+                intent: "arena_vfx_3d",
+                queries: [
+                    "arena animation", "maya", "autodesk maya", "unreal engine", "nuke", "davinci resolve", "after effects", "premiere pro", "photoshop", "illustrator", "digital matte painting", "3d", "game design"
+                ],
+                response: "Atharva is an Arena Certified Professional in VFX Compositing and Editing (Arena Animation Raipur, Apr 2024–Present), mastering Autodesk Maya, Unreal Engine, Nuke, DaVinci Resolve, After Effects, Premiere Pro, Photoshop, Illustrator, and Digital Matte Painting."
+            },
+            {
                 intent: "contact_socials",
                 queries: [
-                    "contact info", "how to hire", "email address", "instagram", "linkedin", "github"
+                    "contact info", "how to hire", "email address", "instagram", "linkedin", "github", "gmail"
                 ],
-                response: "You can reach Atharva via Instagram (@atharva.agrawal8), LinkedIn (in/atharvaagrawal8), GitHub (github.com/atharvaagrawal8), or submit an encrypted message via the website's Uplink form."
+                response: "You can reach Atharva at atharvaagrawal8@gmail.com, via LinkedIn (in/atharvaagrawal8), Instagram (@atharva.agrawal8), GitHub (github.com/UG90), or through the website's Uplink form."
             }
         ];
     }

@@ -8,15 +8,15 @@ const PORTFOLIO_DATA = {
         name: "Atharva Agrawal",
         brandName: "atharva.ai",
         monogram: "AA",
-        title: "Autonomous AI · Cyber Defense · Innovation Engine",
-        school: "Brighton International School, Raipur",
+        title: "Co-Founder, The Smart Retinoscope · AI, Robotics & Embedded Hardware · 3D/VFX & Cyber Defense",
+        school: "Brighton International School, Raipur · Arena Animation Raipur",
         location: "Raipur, Chhattisgarh, India",
-        email: "atharva.agrawal@example.com",
+        email: "atharvaagrawal8@gmail.com",
         web3FormsKey: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         socials: {
             instagram: "https://www.instagram.com/atharva.agrawal8/",
             linkedin: "https://www.linkedin.com/in/atharvaagrawal8/",
-            github: "https://github.com/atharvaagrawal8",
+            github: "https://github.com/UG90",
             twitter: "https://twitter.com/atharvaagrawal8"
         }
     },
@@ -60,16 +60,19 @@ const PORTFOLIO_DATA = {
         { id: "uplink", name: "Secure Encrypted Communication Uplink", visible: true }
     ],
 
-    // 5. Skills Matrix
+    // 5. Skills Matrix (43+ Verified LinkedIn & Portfolio Capabilities)
     skills: [
         { name: "LLMs, Vibe-Coding & GenAI", icon: "fas fa-brain", level: 96, category: "ai" },
-        { name: "Network Security & Cyber Defense", icon: "fas fa-shield-virus", level: 92, category: "cyber" },
-        { name: "VFX & Adobe Creative Cloud Pro", icon: "fas fa-film", level: 93, category: "design" },
-        { name: "Graphic, Brand & Canva Pro (13 Courses)", icon: "fas fa-palette", level: 95, category: "design" },
-        { name: "Full-Stack Web (JS/HTML/CSS)", icon: "fas fa-code", level: 90, category: "web" },
-        { name: "Video & Social Media Content Creation", icon: "fas fa-video", level: 91, category: "design" },
-        { name: "Data Analytics & ML Video Datasets", icon: "fas fa-chart-line", level: 88, category: "data" },
-        { name: "Youth Diplomacy & Responsible AI", icon: "fas fa-microphone-alt", level: 92, category: "leadership" }
+        { name: "Robotics & Embedded (RPi, ESP, Arduino, C++)", icon: "fas fa-robot", level: 93, category: "hardware" },
+        { name: "3D & Game Design (Autodesk Maya, Unreal Engine)", icon: "fas fa-cube", level: 92, category: "design" },
+        { name: "VFX Compositing (Nuke, After Effects, Matte Painting)", icon: "fas fa-film", level: 94, category: "design" },
+        { name: "Video Post-Production (DaVinci Resolve, Premiere Pro)", icon: "fas fa-video", level: 93, category: "design" },
+        { name: "Adobe Creative Cloud & Canva Pro (Photoshop, Illustrator)", icon: "fas fa-palette", level: 95, category: "design" },
+        { name: "Cybersecurity, Ethical Hacking & Linux/SQL", icon: "fas fa-shield-virus", level: 92, category: "cyber" },
+        { name: "Start-up Leadership & Ventures (Smart Retinoscope)", icon: "fas fa-rocket", level: 94, category: "leadership" },
+        { name: "Python, HTML5/CSS3, JS & WordPress Dev", icon: "fas fa-code", level: 91, category: "web" },
+        { name: "Data Science, Excel & Model Making (Revit)", icon: "fas fa-chart-line", level: 89, category: "data" },
+        { name: "Youth Diplomacy & Responsible AI (4WTP)", icon: "fas fa-microphone-alt", level: 92, category: "leadership" }
     ],
 
     // 6. 24+ Verified Certificates & Credentials
@@ -361,11 +364,104 @@ const PORTFOLIO_DATA = {
             verifyUrl: "",
             image: "certificates/cert-24.png",
             file: "certificates/cert-24-orig.jpg"
+        },
+        {
+            id: "cert_25",
+            title: "Arena Certified Professional in VFX Compositing and Editing",
+            issuer: "Arena Animation Raipur",
+            category: "web",
+            date: "June 2026",
+            badge: "VFX & 3D PRO",
+            description: "Comprehensive VFX Compositing, Autodesk Maya, Unreal Engine, Nuke, DaVinci Resolve, After Effects, Premiere Pro, Photoshop & Illustrator mastery. Credential ID: 44eC1605700.",
+            verifyUrl: "",
+            image: "certificates/cert-18.png",
+            file: ""
+        },
+        {
+            id: "cert_26",
+            title: "Canva Essentials Professional Certificate (13 Courses)",
+            issuer: "Coursera / Canva",
+            category: "web",
+            date: "July 2026",
+            badge: "DESIGN PRO",
+            description: "13-course specialization covering Advanced Branding, Typography, Color Theory, AI Magic Studio, Video Content Creation, Event Marketing, Portfolio & Presentation Mastery.",
+            verifyUrl: "https://www.coursera.org/account/accomplishments/professional-cert/certificate/2TC4WLLDQWH5",
+            image: "certificates/cert-18.png",
+            file: ""
+        },
+        {
+            id: "cert_27",
+            title: "Google Cybersecurity: Tools of the Trade - Linux and SQL",
+            issuer: "Google / Coursera",
+            category: "cyber",
+            date: "Sep 2026",
+            badge: "LINUX & SQL",
+            description: "Command-line Linux administration, Bash permissions, and relational SQL security querying for enterprise incident response.",
+            verifyUrl: "https://www.coursera.org/account/accomplishments/records/MFF1IGF2KXKF",
+            image: "certificates/cert-04.png",
+            file: ""
+        },
+        {
+            id: "cert_28",
+            title: "Anjaneya University SRIJAN 5.0 - Model Making",
+            issuer: "Anjaneya University",
+            category: "competition",
+            date: "Oct 2026",
+            badge: "MODEL MAKING",
+            description: "Engineering model making and physical hardware prototyping showcase at SRIJAN 5.0.",
+            verifyUrl: "",
+            image: "certificates/cert-11.png",
+            file: ""
+        },
+        {
+            id: "cert_29",
+            title: "Certificate of Excellence for Health Quiz (1st Place)",
+            issuer: "Brighton International School",
+            category: "competition",
+            date: "Jan 2025",
+            badge: "1ST PLACE GOLD",
+            description: "Secured 1st Place in the Inter-House Health & Medical Science Quiz.",
+            verifyUrl: "",
+            image: "certificates/cert-10.png",
+            file: ""
+        },
+        {
+            id: "cert_30",
+            title: "Build a Free Website with WordPress",
+            issuer: "Coursera",
+            category: "web",
+            date: "May 2026",
+            badge: "WORDPRESS DEV",
+            description: "Full WordPress CMS architecture, theme customization, plugin orchestration, and responsive publishing.",
+            verifyUrl: "https://www.coursera.org/account/accomplishments/records/FFIMLRG6LULS",
+            image: "certificates/cert-18.png",
+            file: ""
+        },
+        {
+            id: "cert_31",
+            title: "Getting Started with Microsoft Excel",
+            issuer: "Coursera",
+            category: "workshop",
+            date: "May 2026",
+            badge: "DATA ANALYTICS",
+            description: "Spreadsheet modeling, logical formulas, data cleaning, and structured analytics workflows.",
+            verifyUrl: "https://www.coursera.org/account/accomplishments/records/4YLHV7A4X4RY",
+            image: "certificates/cert-08.png",
+            file: ""
         }
     ],
 
     // 7. Featured Prototypes & Projects
     projects: [
+        {
+            id: "p0",
+            title: "The Smart Retinoscope (Co-Founder)",
+            desc: "Co-founded hardware-AI venture combining Raspberry Pi, ESP32, Arduino, C++/Python embedded vision, and medical-tech innovation.",
+            tags: ["Co-Founder", "Embedded Hardware", "Raspberry Pi / ESP", "AI + MedTech"],
+            image: "certificates/cert-11.png",
+            githubUrl: "https://github.com/UG90",
+            demoUrl: "#"
+        },
         {
             id: "p1",
             title: "Autonomous Multi-Agent AI Workflow Engine",
