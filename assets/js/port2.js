@@ -19,10 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function safeUrl(url) {
         if (!url || typeof url !== 'string') return '#';
         const trimmed = url.trim();
-        if (/^(#[a-zA-Z0-9_-]+|\/[^/\\]|\.\/|\.\.\/|https?:\/\/|mailto:[^@\s]+@[^@\s]+|tel:[+0-9-]+)/i.test(trimmed)) {
-            if (!/^(javascript:|vbscript:|data:)/i.test(trimmed)) {
-                return trimmed.replace(/[<>"']/g, '');
-            }
+        if (/^(javascript:|vbscript:|data:)/i.test(trimmed)) return '#';
+        if (/^(#[a-zA-Z0-9_-]+|\/[^/\\]|\.\/|\.\.\/|https?:\/\/|mailto:[^@\s]+@[^@\s]+|tel:[+0-9-]+|[a-zA-Z0-9_-]+\/[a-zA-Z0-9_./-]+)$/i.test(trimmed)) {
+            return trimmed.replace(/[<>"']/g, '');
         }
         return '#';
     }
