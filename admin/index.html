@@ -538,6 +538,29 @@
 
         <!-- Section 1: Certificates Manager -->
         <div class="tab-pane" id="pane-certs">
+            <!-- LinkedIn Auto-Sync & Smart Importer Card -->
+            <div style="background: #0b0f19; border: 1px solid rgba(6,182,212,0.35); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
+                    <div>
+                        <h4 style="color:#fff; font-size:1rem; margin:0;"><i class="fab fa-linkedin" style="color:#0a66c2;"></i> LinkedIn Certificates Auto-Sync</h4>
+                        <p style="font-size:11px; color:#94a3b8; margin-top:4px;">Toggle automatic JSON feed sync on/off, or paste newly uploaded LinkedIn certificate text/JSON to import instantly.</p>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <button type="button" id="toggle-linkedin-sync-btn" class="admin-btn-outline" style="min-width: 150px;">
+                            <i class="fas fa-sync"></i> AUTO-SYNC: OFF
+                        </button>
+                        <button type="button" id="open-linkedin-import-btn" class="admin-btn-primary">
+                            <i class="fas fa-file-import"></i> Import from LinkedIn
+                        </button>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr auto; gap:10px; align-items:center;">
+                    <input type="url" id="linkedin-feed-url" class="form-control" placeholder="Optional JSON Feed URL (e.g. GitHub Gist / Make / Zapier webhook JSON) for auto-sync on page load">
+                    <button type="button" id="save-linkedin-feed-btn" class="admin-btn-outline"><i class="fas fa-save"></i> Save Feed</button>
+                </div>
+                <div id="linkedin-sync-feedback" style="font-size:11px; color:#10b981; margin-top:8px;"></div>
+            </div>
+
             <div class="admin-actions-bar">
                 <h3 style="font-size: 1.1rem; color: #fff;">Manage Accredited Certifications</h3>
                 <button class="admin-btn-primary" id="add-cert-btn">
@@ -630,6 +653,26 @@
                 </button>
                 <span id="settings-feedback" style="margin-left: 10px; font-size: 12px; color: #10b981;"></span>
             </div>
+        </div>
+    </div>
+
+    <!-- LinkedIn Smart Certificate Importer Modal -->
+    <div class="editor-modal" id="linkedin-import-modal">
+        <div class="editor-modal-card">
+            <h3 style="color: #fff; margin-bottom: 10px;"><i class="fab fa-linkedin" style="color:#0a66c2;"></i> Smart LinkedIn Certificate Importer</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-bottom: 14px;">
+                Copy any certificate block from your LinkedIn <em>Licenses &amp; certifications</em> page (or paste JSON) below. Duplicates are skipped automatically!
+            </p>
+            <form id="linkedin-import-form">
+                <div class="form-row">
+                    <label>PASTE LINKEDIN TEXT OR JSON ARRAY</label>
+                    <textarea id="linkedin-import-raw" class="form-control" rows="7" required placeholder="Example:&#10;Google Cloud Security Engineer&#10;Google&#10;Issued Nov 2026&#10;Credential ID XYZ123"></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px;">
+                    <button type="button" class="admin-btn-outline" id="cancel-linkedin-import">Cancel</button>
+                    <button type="submit" class="admin-btn-primary">Parse &amp; Sync Certificates</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -899,7 +942,118 @@
 
             const savedKey = localStorage.getItem('PORTFOLIO_WEB3FORMS_KEY') || (currentData.profile && currentData.profile.web3FormsKey) || '';
             document.getElementById('setting-web3-key').value = savedKey;
+            renderLinkedInSyncUI();
         }
+
+        // ==================== LINKEDIN AUTO-SYNC & SMART IMPORTER ====================
+        function renderLinkedInSyncUI() {
+            const btn = document.getElementById('toggle-linkedin-sync-btn');
+            const feedInput = document.getElementById('linkedin-feed-url');
+            if (!btn || !feedInput) return;
+            const enabled = !!(currentData.linkedinSync && currentData.linkedinSync.enabled);
+            btn.innerHTML = enabled
+                ? '<i class="fas fa-sync fa-spin" style="color:#10b981;"></i> AUTO-SYNC: ON'
+                : '<i class="fas fa-power-off" style="color:#94a3b8;"></i> AUTO-SYNC: OFF';
+            btn.style.borderColor = enabled ? '#10b981' : 'rgba(255,255,255,0.2)';
+            btn.style.color = enabled ? '#10b981' : '#e2e8f0';
+            feedInput.value = (currentData.linkedinSync && currentData.linkedinSync.feedUrl) || '';
+        }
+
+        document.getElementById('toggle-linkedin-sync-btn').addEventListener('click', () => {
+            if (!currentData.linkedinSync) currentData.linkedinSync = { enabled: false, feedUrl: '', lastSynced: '' };
+            currentData.linkedinSync.enabled = !currentData.linkedinSync.enabled;
+            saveActivePortfolioData(currentData);
+            renderLinkedInSyncUI();
+            const fb = document.getElementById('linkedin-sync-feedback');
+            fb.textContent = `LinkedIn Auto-Sync turned ${currentData.linkedinSync.enabled ? 'ON' : 'OFF'}.`;
+            setTimeout(() => fb.textContent = '', 3000);
+        });
+
+        document.getElementById('save-linkedin-feed-btn').addEventListener('click', () => {
+            if (!currentData.linkedinSync) currentData.linkedinSync = { enabled: false, feedUrl: '', lastSynced: '' };
+            const rawUrl = document.getElementById('linkedin-feed-url').value.trim();
+            currentData.linkedinSync.feedUrl = rawUrl ? safeUrl(rawUrl) : '';
+            saveActivePortfolioData(currentData);
+            const fb = document.getElementById('linkedin-sync-feedback');
+            fb.textContent = "LinkedIn Sync Feed URL saved!";
+            setTimeout(() => fb.textContent = '', 3000);
+        });
+
+        const liImportModal = document.getElementById('linkedin-import-modal');
+        document.getElementById('open-linkedin-import-btn').addEventListener('click', () => {
+            liImportModal.classList.add('active');
+        });
+        document.getElementById('cancel-linkedin-import').addEventListener('click', () => {
+            liImportModal.classList.remove('active');
+        });
+
+        document.getElementById('linkedin-import-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const raw = document.getElementById('linkedin-import-raw').value.trim();
+            if (!raw) return;
+            const existingTitles = new Set(currentData.certificates.map(c => (c.title || '').trim().toLowerCase()));
+            let added = 0;
+
+            if (raw.startsWith('[') || raw.startsWith('{')) {
+                try {
+                    const parsed = JSON.parse(raw);
+                    const arr = Array.isArray(parsed) ? parsed : (parsed.certificates || [parsed]);
+                    arr.forEach((item, idx) => {
+                        if (!item || !item.title) return;
+                        const key = String(item.title).trim().toLowerCase();
+                        if (!existingTitles.has(key)) {
+                            existingTitles.add(key);
+                            currentData.certificates.unshift({
+                                id: 'li_' + Date.now() + '_' + idx,
+                                title: String(item.title),
+                                issuer: String(item.issuer || 'LinkedIn'),
+                                category: String(item.category || 'ai'),
+                                date: String(item.date || '2026'),
+                                badge: String(item.badge || 'LINKEDIN SYNC'),
+                                description: String(item.description || 'Imported from LinkedIn Certifications.'),
+                                verifyUrl: item.verifyUrl ? safeUrl(item.verifyUrl) : '',
+                                image: 'certificates/cert-01.png',
+                                file: ''
+                            });
+                            added++;
+                        }
+                    });
+                } catch (err) {
+                    alert('Invalid JSON format.');
+                    return;
+                }
+            } else {
+                // Parse copied LinkedIn text blocks
+                const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+                let title = lines[0] || '';
+                let issuer = lines[1] || 'LinkedIn Verified';
+                let dateLine = lines.find(l => /^Issued\s+/i.test(l)) || '2026';
+                let credLine = lines.find(l => /^Credential ID\s+/i.test(l)) || '';
+                if (title && !existingTitles.has(title.toLowerCase())) {
+                    currentData.certificates.unshift({
+                        id: 'li_' + Date.now(),
+                        title: title,
+                        issuer: issuer,
+                        category: /cyber|security|linux|sql/i.test(title) ? 'cyber' : (/vfx|maya|canva|design|wordpress/i.test(title) ? 'web' : 'ai'),
+                        date: dateLine.replace(/^Issued\s+/i, ''),
+                        badge: 'LINKEDIN SYNC',
+                        description: credLine ? `Verified LinkedIn Certification (${credLine}).` : 'Verified LinkedIn Certification.',
+                        verifyUrl: '',
+                        image: 'certificates/cert-01.png',
+                        file: ''
+                    });
+                    added++;
+                }
+            }
+
+            saveActivePortfolioData(currentData);
+            liImportModal.classList.remove('active');
+            document.getElementById('linkedin-import-raw').value = '';
+            loadAdminData();
+            const fb = document.getElementById('linkedin-sync-feedback');
+            fb.textContent = added > 0 ? `Synced ${added} new certificate(s) from LinkedIn!` : 'No new certificates added (already present).';
+            setTimeout(() => fb.textContent = '', 4000);
+        });
 
         // ==================== NAVIGATION MENUS MANAGER ====================
         function renderAdminMenus() {

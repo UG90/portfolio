@@ -21,6 +21,14 @@ const PORTFOLIO_DATA = {
         }
     },
 
+    // 1B. LinkedIn Certificate Auto-Sync Configuration (Toggleable in Admin Panel & sudo CLI)
+    linkedinSync: {
+        enabled: false,
+        profileUrl: "https://www.linkedin.com/in/atharvaagrawal8/details/certifications/",
+        feedUrl: "",
+        lastSynced: ""
+    },
+
     // 2. Dynamic WordPress Navigation Menus (Add, Edit, Reorder, Delete)
     navigation: [
         { id: "nav_bento", label: "Bento Matrix", icon: "fas fa-th-large", target: "#matrix-bento", visible: true },
@@ -524,6 +532,7 @@ function getActivePortfolioData() {
                 ...PORTFOLIO_DATA,
                 ...parsed,
                 profile: { ...PORTFOLIO_DATA.profile, ...(parsed.profile || {}) },
+                linkedinSync: { ...PORTFOLIO_DATA.linkedinSync, ...(parsed.linkedinSync || {}) },
                 appearance: { ...PORTFOLIO_DATA.appearance, ...(parsed.appearance || {}) },
                 navigation: parsed.navigation || PORTFOLIO_DATA.navigation,
                 sections: parsed.sections || PORTFOLIO_DATA.sections

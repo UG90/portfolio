@@ -33,7 +33,63 @@ document.addEventListener('DOMContentLoaded', () => {
     const CERTIFICATES_DB = activeData.certificates || [];
     const PROTOTYPES_DB = activeData.projects || [];
 
-    // ==================== 1B. APPLY DYNAMIC WORDPRESS THEME APPEARANCE ====================
+    // ==================== 1B. ADMIN AUTH & LINKEDIN AUTO-SYNC ====================
+    function isAdminAuthenticated() {
+        return sessionStorage.getItem('PORT2_ADMIN_AUTH') === 'true' ||
+               localStorage.getItem('PORT2_REMEMBER_ADMIN') === 'true' ||
+               sessionStorage.getItem('FIREBASE_AUTH_ACTIVE') === 'true';
+    }
+
+    async function sha256Hex(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function runLinkedInAutoSync() {
+        if (!activeData.linkedinSync || !activeData.linkedinSync.enabled || !activeData.linkedinSync.feedUrl) return;
+        const feedUrl = safeUrl(activeData.linkedinSync.feedUrl);
+        if (feedUrl === '#') return;
+        try {
+            const res = await fetch(feedUrl, { cache: 'no-store' });
+            if (!res.ok) return;
+            const incoming = await res.json();
+            const list = Array.isArray(incoming) ? incoming : (Array.isArray(incoming.certificates) ? incoming.certificates : []);
+            let addedCount = 0;
+            const existingTitles = new Set(CERTIFICATES_DB.map(c => (c.title || '').trim().toLowerCase()));
+            list.forEach((item, idx) => {
+                if (!item || !item.title) return;
+                const key = String(item.title).trim().toLowerCase();
+                if (!existingTitles.has(key)) {
+                    existingTitles.add(key);
+                    CERTIFICATES_DB.unshift({
+                        id: item.id || ('li_' + Date.now() + '_' + idx),
+                        title: String(item.title),
+                        issuer: String(item.issuer || 'LinkedIn Verified'),
+                        category: String(item.category || 'ai'),
+                        date: String(item.date || new Date().getFullYear()),
+                        badge: String(item.badge || 'LINKEDIN SYNC'),
+                        description: String(item.description || 'Automatically synced from LinkedIn Certifications.'),
+                        verifyUrl: safeUrl(item.verifyUrl || ''),
+                        image: safeUrl(item.image || '') !== '#' ? safeUrl(item.image) : 'certificates/cert-01.png',
+                        file: ''
+                    });
+                    addedCount++;
+                }
+            });
+            if (addedCount > 0 && typeof saveActivePortfolioData === 'function') {
+                activeData.certificates = CERTIFICATES_DB;
+                activeData.linkedinSync.lastSynced = new Date().toISOString();
+                saveActivePortfolioData(activeData);
+                if (typeof renderVault === 'function') renderVault();
+            }
+        } catch (err) {
+            console.warn('LinkedIn Auto-Sync feed check skipped:', err);
+        }
+    }
+    runLinkedInAutoSync();
+
+    // ==================== 1C. APPLY DYNAMIC WORDPRESS THEME APPEARANCE ====================
     function applyAppearanceSettings() {
         if (!activeData.appearance) return;
         const app = activeData.appearance;
@@ -546,6 +602,18 @@ document.addEventListener('DOMContentLoaded', () => {
         aiMessages.appendChild(userMsg);
         aiMessages.scrollTop = aiMessages.scrollHeight;
 
+        // Support live Admin 'sudo' commands directly inside AI Twin
+        if (query.trim().toLowerCase().startsWith('sudo ')) {
+            executeSudoCommand(query.trim(), (replyHtml) => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'ai-msg bot';
+                botMsg.innerHTML = `<span class="sender" style="color:#f43f5e">[SUDO_ROOT]:</span> <span class="text">${replyHtml}</span>`;
+                aiMessages.appendChild(botMsg);
+                aiMessages.scrollTop = aiMessages.scrollHeight;
+            });
+            return;
+        }
+
         // Execute Real In-Browser NLP Machine Learning Prediction
         setTimeout(() => {
             playUiBeep(850, 'triangle', 0.05);
@@ -613,10 +681,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cliInput) {
         cliInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
-                const cmd = cliInput.value.trim().toLowerCase();
+                const rawCmd = cliInput.value.trim();
                 cliInput.value = '';
-                printCliLine(`guest@atharva-core:~$ ${escapeHtml(cmd)}`, 'text-neon');
-                executeCliCommand(cmd);
+                const promptPrefix = isAdminAuthenticated() ? 'root@atharva-sudo:~#' : 'guest@atharva-core:~$';
+                printCliLine(`${promptPrefix} ${escapeHtml(rawCmd)}`, 'text-neon');
+                executeCliCommand(rawCmd);
             }
         });
     }
@@ -629,9 +698,228 @@ document.addEventListener('DOMContentLoaded', () => {
         cliScreen.scrollTop = cliScreen.scrollHeight;
     }
 
-    function executeCliCommand(cmd) {
+    async function executeSudoCommand(rawCmd, outputFn) {
+        const parts = rawCmd.trim().slice(5).trim();
+        const tokens = parts.split(/\s+/);
+        const sub = (tokens[0] || '').toLowerCase();
+        const rest = parts.slice(sub.length).trim();
+
+        // Allow 'sudo login <passphrase>' using SHA-256 verification
+        if (sub === 'login') {
+            if (!rest) {
+                outputFn('Usage: sudo login &lt;passphrase&gt;');
+                return;
+            }
+            const DEFAULT_HASH = "80f86d8b6c433364f33198a28ce1994625b0453303666d9fa2472ec4325a7ca8";
+            const inputHash = await sha256Hex(rest);
+            const customHash = localStorage.getItem('PORT2_ADMIN_PASS_HASH');
+            const ok = customHash ? (inputHash === customHash) : (inputHash === DEFAULT_HASH);
+            if (ok) {
+                sessionStorage.setItem('PORT2_ADMIN_AUTH', 'true');
+                outputFn('<span style="color:#10b981">[ROOT GRANTED]</span> Admin sudo privileges active for this session. Type <strong>sudo help</strong>.');
+            } else {
+                outputFn('<span style="color:#f43f5e">[ACCESS DENIED]</span> Incorrect passphrase.');
+            }
+            return;
+        }
+
+        if (!isAdminAuthenticated()) {
+            outputFn('<span style="color:#f43f5e">[SUDO LOCKED]</span> Admin authentication required. Run <strong>sudo login &lt;passphrase&gt;</strong> or sign in via Admin Console.');
+            return;
+        }
+
+        const blocks = JSON.parse(localStorage.getItem('ATHARVA_PORTFOLIO_PAGE_BLOCKS') || '{}');
+
+        switch (sub) {
+            case 'help':
+            case '':
+                outputFn(
+                    `<strong>SUDO LIVE ADMIN COMMANDS:</strong><br>` +
+                    `• <span class='text-neon'>sudo status</span> — Inspect live system &amp; LinkedIn sync status<br>` +
+                    `• <span class='text-neon'>sudo set brand &lt;name&gt;</span> — Live-update website brand name<br>` +
+                    `• <span class='text-neon'>sudo set headline &lt;text&gt;</span> — Live-update hero badge headline<br>` +
+                    `• <span class='text-neon'>sudo set bio &lt;text&gt;</span> — Live-update hero bio everywhere<br>` +
+                    `• <span class='text-neon'>sudo set theme &lt;#hex&gt;</span> — Live-update primary neon theme color<br>` +
+                    `• <span class='text-neon'>sudo add skill &lt;name&gt; | &lt;level&gt; | &lt;category&gt;</span> — Add skill live<br>` +
+                    `• <span class='text-neon'>sudo add cert &lt;title&gt; | &lt;issuer&gt; | &lt;category&gt;</span> — Add certificate to Vault live<br>` +
+                    `• <span class='text-neon'>sudo toggle section &lt;id&gt; &lt;on|off&gt;</span> — Show/hide section live<br>` +
+                    `• <span class='text-neon'>sudo linkedin-sync &lt;on|off&gt;</span> — Toggle LinkedIn Auto-Sync<br>` +
+                    `• <span class='text-neon'>sudo train &lt;intent&gt; | &lt;q1,q2&gt; | &lt;response&gt;</span> — Train ML Brain live<br>` +
+                    `• <span class='text-neon'>sudo cmd &lt;name&gt; | &lt;output&gt;</span> — Add custom CLI command live`
+                );
+                break;
+
+            case 'status': {
+                const syncState = (activeData.linkedinSync && activeData.linkedinSync.enabled) ? 'ON' : 'OFF';
+                outputFn(
+                    `[SUDO STATUS] Auth: <span style="color:#10b981">ROOT</span> | Certs: ${CERTIFICATES_DB.length} | Skills: ${(activeData.skills || []).length} | LinkedIn Auto-Sync: ${syncState} | Primary Color: ${escapeHtml((activeData.appearance && activeData.appearance.primaryColor) || '#06b6d4')}`
+                );
+                break;
+            }
+
+            case 'set': {
+                const spaceIdx = rest.indexOf(' ');
+                const field = (spaceIdx > -1 ? rest.slice(0, spaceIdx) : rest).toLowerCase();
+                const value = spaceIdx > -1 ? rest.slice(spaceIdx + 1).trim() : '';
+                if (!value) {
+                    outputFn('Usage: sudo set &lt;brand|headline|bio|theme&gt; &lt;value&gt;');
+                    return;
+                }
+                if (field === 'brand') {
+                    if (!activeData.profile) activeData.profile = {};
+                    activeData.profile.brandName = value;
+                    blocks['brand_name'] = escapeHtml(value);
+                    document.querySelectorAll('.brand-name').forEach(el => { el.textContent = value; });
+                    localStorage.setItem('ATHARVA_PORTFOLIO_PAGE_BLOCKS', JSON.stringify(blocks));
+                    if (typeof saveActivePortfolioData === 'function') saveActivePortfolioData(activeData);
+                    outputFn(`Brand updated live everywhere to: <strong>${escapeHtml(value)}</strong>`);
+                } else if (field === 'headline') {
+                    blocks['hero_badge_text'] = escapeHtml(value);
+                    const el = document.querySelector('.hero-header-badge span');
+                    if (el) el.textContent = value;
+                    localStorage.setItem('ATHARVA_PORTFOLIO_PAGE_BLOCKS', JSON.stringify(blocks));
+                    outputFn(`Hero headline updated live to: <strong>${escapeHtml(value)}</strong>`);
+                } else if (field === 'bio') {
+                    if (!activeData.profile) activeData.profile = {};
+                    activeData.profile.title = value;
+                    blocks['hero_bio_text'] = escapeHtml(value);
+                    const el = document.querySelector('.hero-manifesto p');
+                    if (el) el.textContent = value;
+                    localStorage.setItem('ATHARVA_PORTFOLIO_PAGE_BLOCKS', JSON.stringify(blocks));
+                    if (typeof saveActivePortfolioData === 'function') saveActivePortfolioData(activeData);
+                    outputFn(`Hero bio updated live everywhere!`);
+                } else if (field === 'theme') {
+                    if (!/^#[0-9a-fA-F]{3,8}$/.test(value)) {
+                        outputFn('Provide a valid hex color, e.g. sudo set theme #10b981');
+                        return;
+                    }
+                    if (!activeData.appearance) activeData.appearance = {};
+                    activeData.appearance.primaryColor = value;
+                    if (typeof saveActivePortfolioData === 'function') saveActivePortfolioData(activeData);
+                    applyAppearanceSettings();
+                    outputFn(`Primary theme color updated live to <strong>${escapeHtml(value)}</strong>`);
+                } else {
+                    outputFn(`Unknown field '${escapeHtml(field)}'. Supported: brand, headline, bio, theme.`);
+                }
+                break;
+            }
+
+            case 'add': {
+                const spaceIdx = rest.indexOf(' ');
+                const kind = (spaceIdx > -1 ? rest.slice(0, spaceIdx) : rest).toLowerCase();
+                const payload = spaceIdx > -1 ? rest.slice(spaceIdx + 1).trim() : '';
+                const segs = payload.split('|').map(s => s.trim());
+                if (kind === 'cert') {
+                    if (!segs[0]) { outputFn('Usage: sudo add cert Title | Issuer | ai/cyber/web/competition/workshop'); return; }
+                    const newCert = {
+                        id: 'cert_' + Date.now(),
+                        title: segs[0],
+                        issuer: segs[1] || 'Verified Credential',
+                        category: (segs[2] || 'ai').toLowerCase(),
+                        date: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+                        badge: 'LIVE SUDO',
+                        description: segs[3] || 'Added live via Admin Sudo Terminal.',
+                        verifyUrl: '',
+                        image: 'certificates/cert-01.png',
+                        file: ''
+                    };
+                    CERTIFICATES_DB.unshift(newCert);
+                    activeData.certificates = CERTIFICATES_DB;
+                    if (typeof saveActivePortfolioData === 'function') saveActivePortfolioData(activeData);
+                    renderVault();
+                    outputFn(`Certificate <strong>${escapeHtml(newCert.title)}</strong> added live to Vault (${CERTIFICATES_DB.length} total).`);
+                } else if (kind === 'skill') {
+                    if (!segs[0]) { outputFn('Usage: sudo add skill Name | 95 | ai'); return; }
+                    if (!activeData.skills) activeData.skills = [];
+                    activeData.skills.push({
+                        name: segs[0],
+                        level: Math.min(100, Math.max(1, parseInt(segs[1], 10) || 90)),
+                        category: segs[2] || 'ai',
+                        icon: 'fas fa-bolt'
+                    });
+                    if (typeof saveActivePortfolioData === 'function') saveActivePortfolioData(activeData);
+                    const cloud = document.querySelector('.skill-tags-cloud');
+                    if (cloud) {
+                        const pill = document.createElement('span');
+                        pill.className = 'skill-pill';
+                        pill.innerHTML = `<i class="fas fa-bolt"></i> ${escapeHtml(segs[0])} <strong>${Math.min(100, Math.max(1, parseInt(segs[1], 10) || 90))}%</strong>`;
+                        cloud.appendChild(pill);
+                    }
+                    outputFn(`Skill <strong>${escapeHtml(segs[0])}</strong> added live.`);
+                } else {
+                    outputFn(`Unknown target '${escapeHtml(kind)}'. Use: sudo add cert ... or sudo add skill ...`);
+                }
+                break;
+            }
+
+            case 'toggle': {
+                const segs = rest.split(/\s+/);
+                if (segs[0] === 'section' && segs[1]) {
+                    const secId = segs[1];
+                    const stateArg = (segs[2] || '').toLowerCase();
+                    const secObj = (activeData.sections || []).find(s => s.id === secId);
+                    const secEl = document.getElementById(secId);
+                    if (!secEl) { outputFn(`Section '#${escapeHtml(secId)}' not found.`); return; }
+                    const nextVisible = stateArg === 'on' ? true : (stateArg === 'off' ? false : (secEl.style.display === 'none'));
+                    secEl.style.display = nextVisible ? '' : 'none';
+                    if (secObj) secObj.visible = nextVisible;
+                    if (typeof saveActivePortfolioData === 'function') saveActivePortfolioData(activeData);
+                    outputFn(`Section <strong>#${escapeHtml(secId)}</strong> is now ${nextVisible ? 'VISIBLE' : 'HIDDEN'}.`);
+                } else {
+                    outputFn('Usage: sudo toggle section &lt;hero|matrix-bento|intel|vault|projects|arena|uplink&gt; [on|off]');
+                }
+                break;
+            }
+
+            case 'linkedin-sync': {
+                const mode = rest.toLowerCase();
+                if (!activeData.linkedinSync) activeData.linkedinSync = { enabled: false, feedUrl: '', lastSynced: '' };
+                activeData.linkedinSync.enabled = (mode === 'on') ? true : (mode === 'off' ? false : !activeData.linkedinSync.enabled);
+                if (typeof saveActivePortfolioData === 'function') saveActivePortfolioData(activeData);
+                outputFn(`LinkedIn Auto-Sync is now <strong>${activeData.linkedinSync.enabled ? 'ENABLED (ON)' : 'DISABLED (OFF)'}</strong>.`);
+                if (activeData.linkedinSync.enabled) runLinkedInAutoSync();
+                break;
+            }
+
+            case 'train': {
+                const segs = rest.split('|').map(s => s.trim());
+                if (segs.length < 3) {
+                    outputFn('Usage: sudo train intent_name | query1, query2 | Response text');
+                    return;
+                }
+                if (window.PortfolioML) {
+                    window.PortfolioML.addTrainingIntent(segs[0], segs[1].split(','), segs[2]);
+                    outputFn(`ML Twin &amp; CLI trained live on intent <strong>${escapeHtml(segs[0])}</strong>!`);
+                }
+                break;
+            }
+
+            case 'cmd': {
+                const segs = rest.split('|').map(s => s.trim());
+                if (segs.length < 2) {
+                    outputFn('Usage: sudo cmd command_name | Output text');
+                    return;
+                }
+                if (window.PortfolioML) {
+                    window.PortfolioML.setCustomCommand(segs[0], segs[1]);
+                    outputFn(`Custom CLI command <strong>${escapeHtml(segs[0])}</strong> registered live!`);
+                }
+                break;
+            }
+
+            default:
+                outputFn(`Unknown sudo subcommand '${escapeHtml(sub)}'. Type <strong>sudo help</strong>.`);
+        }
+    }
+
+    function executeCliCommand(rawCmd) {
         playUiBeep(950, 'sine', 0.04);
-        const cleanCmd = cmd.trim().toLowerCase();
+        const cleanCmd = rawCmd.trim().toLowerCase();
+
+        if (cleanCmd === 'sudo' || cleanCmd.startsWith('sudo ')) {
+            executeSudoCommand(rawCmd, (html) => printCliLine(html));
+            return;
+        }
 
         // Check custom commands first
         if (window.PortfolioML && typeof window.PortfolioML.executeCommand === 'function') {
@@ -645,13 +933,13 @@ document.addEventListener('DOMContentLoaded', () => {
         switch (cleanCmd) {
             case 'help':
                 const customKeys = (window.PortfolioML && window.PortfolioML.customCommands) ? Object.keys(window.PortfolioML.customCommands).map(k => escapeHtml(k)).join(', ') : 'skills, certs, achievements, contact';
-                printCliLine(`AVAILABLE COMMANDS:<br>• <span class='text-neon'>admin</span> - Open secure CMS console<br>• <span class='text-neon'>bio</span> - Print Atharva's executive summary<br>• <span class='text-neon'>certs</span> - Output certificate statistics<br>• <span class='text-neon'>skills</span> - Output technical domain proficiency<br>• <span class='text-neon'>contact</span> - Show communication channels<br>• <span class='text-neon'>clear</span> - Purge screen logs<br>• <span class='text-neon'>exit</span> - Close terminal<br><br>CUSTOM COMMANDS CONFIGURED: [${customKeys}]`);
+                printCliLine(`AVAILABLE COMMANDS:<br>• <span class='text-neon'>admin</span> - Open secure CMS console<br>• <span class='text-neon'>sudo help</span> - Linux-style live Admin website editor<br>• <span class='text-neon'>bio</span> - Print Atharva's executive summary<br>• <span class='text-neon'>certs</span> - Output certificate statistics<br>• <span class='text-neon'>skills</span> - Output technical domain proficiency<br>• <span class='text-neon'>contact</span> - Show communication channels<br>• <span class='text-neon'>clear</span> - Purge screen logs<br>• <span class='text-neon'>exit</span> - Close terminal<br><br>CUSTOM COMMANDS CONFIGURED: [${customKeys}]`);
                 break;
             case 'admin':
                 window.location.href = 'admin/index.html';
                 break;
             case 'bio':
-                printCliLine("SUBJECT: Atharva Agrawal<br>INSTITUTION: Brighton International School, Raipur<br>SPECIALTIES: Large Language Models, Enterprise Network Defense, Youth Diplomacy.<br>HONORS: 4th World Teen Parliament Influencer, VVM National Selection, IIM Indore Pi Quiz Finalist.");
+                printCliLine("SUBJECT: Atharva Agrawal<br>ROLE: Co-Founder, The Smart Retinoscope · Brighton International School · Arena Animation Raipur<br>DOMAINS: AI &amp; Robotics (RPi, ESP, Arduino, Python, C++), 3D/VFX (Maya, Unreal, Nuke, DaVinci, Adobe CC), Cyber Defense.<br>HONORS: 4th World Teen Parliament MP, VVM National Selection, IIM Indore Pi Quiz, IIT Bombay Eureka! Jr, NIT Raipur INAE.");
                 break;
             case 'clear':
                 cliScreen.innerHTML = '';
@@ -660,16 +948,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleCli();
                 break;
             default:
-                // Use ML prediction as terminal conversational fallback!
+                // Use Fuzzy ML prediction + typo suggestion as terminal fallback!
                 if (window.PortfolioML && typeof window.PortfolioML.predict === 'function') {
-                    const mlRes = window.PortfolioML.predict(cmd);
+                    const suggestion = typeof window.PortfolioML.suggestCommand === 'function'
+                        ? window.PortfolioML.suggestCommand(cleanCmd, ['help', 'admin', 'bio', 'clear', 'exit'])
+                        : null;
+                    const mlRes = window.PortfolioML.predict(rawCmd);
                     if (mlRes.matched) {
                         printCliLine(`<span style="color:#06b6d4">[Neural Match: ${escapeHtml(mlRes.confidence)}]</span> ${escapeHtml(mlRes.response)}`);
+                    } else if (suggestion) {
+                        printCliLine(`Command not recognized: '${escapeHtml(rawCmd)}'. Did you mean <span class='text-neon'>${escapeHtml(suggestion)}</span>? Type 'help' for guidance.`, 'text-muted');
                     } else {
-                        printCliLine(`Command not recognized: '${escapeHtml(cmd)}'. Type 'help' for guidance.`, 'text-muted');
+                        printCliLine(`Command not recognized: '${escapeHtml(rawCmd)}'. Type 'help' for guidance.`, 'text-muted');
                     }
                 } else {
-                    printCliLine(`Command not recognized: '${escapeHtml(cmd)}'. Type 'help' for guidance.`, 'text-muted');
+                    printCliLine(`Command not recognized: '${escapeHtml(rawCmd)}'. Type 'help' for guidance.`, 'text-muted');
                 }
                 break;
         }

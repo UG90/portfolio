@@ -52,7 +52,7 @@ assert(dataContent.includes('sanitizeDataPayload'), "Prototype pollution shield 
 
 // Test Vector 1: CLI Terminal XSS Protection
 const port2JsContent = fs.readFileSync(port2JsPath, 'utf8');
-assert(port2JsContent.includes('escapeHtml(cmd)'), "CLI user command input is escaped against reflected XSS", "SECURITY");
+assert(port2JsContent.includes('escapeHtml(rawCmd)'), "CLI user command input is escaped against reflected XSS", "SECURITY");
 assert(port2JsContent.includes('escapeHtml(customResult.output)'), "Custom CLI command output is escaped against stored XSS", "SECURITY");
 assert(port2JsContent.includes('escapeHtml(responseText)'), "AI Twin responses are escaped before DOM insertion", "SECURITY");
 
@@ -87,12 +87,22 @@ assert(port2JsContent.includes('translate3d'), "Cursor coordinates use GPU hardw
 const cssContent = fs.readFileSync(cssPath, 'utf8');
 assert(cssContent.includes('will-change: transform'), "Cursor elements specify will-change: transform for hardware layer promotion", "PERFORMANCE");
 
-// 5. ML BRAIN ACCURACY CHECK
+// 5. ML BRAIN ACCURACY, TYPO TOLERANCE, SUDO & LINKEDIN SYNC CHECK
 const mlBrainContent = fs.readFileSync(mlBrainJsPath, 'utf8');
 assert(mlBrainContent.includes('class PortfolioMLEngine'), "PortfolioMLEngine class is defined", "FUNCTIONAL");
 assert(mlBrainContent.includes('cosineSimilarity'), "Vector space cosine similarity math is implemented", "FUNCTIONAL");
+assert(mlBrainContent.includes('editDistance'), "Levenshtein typo/mistake correction is implemented in ML Brain", "FUNCTIONAL");
+assert(mlBrainContent.includes('suggestCommand'), "Fuzzy CLI command suggestion is implemented", "FUNCTIONAL");
+assert(mlBrainContent.includes('smart_retinoscope'), "Smart Retinoscope startup intent is trained", "FUNCTIONAL");
+assert(mlBrainContent.includes('robotics_embedded'), "Robotics & Embedded Hardware intent is trained", "FUNCTIONAL");
+assert(mlBrainContent.includes('arena_vfx_3d'), "Arena Animation 3D & VFX intent is trained", "FUNCTIONAL");
 assert(mlBrainContent.includes('google_ai'), "Google AI specialization intent is trained", "FUNCTIONAL");
 assert(mlBrainContent.includes('google_cybersecurity'), "Google Cybersecurity specialization intent is trained", "FUNCTIONAL");
+assert(port2JsContent.includes('executeSudoCommand'), "Linux-style sudo live admin editor is present", "FUNCTIONAL");
+assert(port2JsContent.includes('isAdminAuthenticated()'), "Sudo engine enforces strict admin authentication", "SECURITY");
+assert(port2JsContent.includes('runLinkedInAutoSync'), "LinkedIn Certificate Auto-Sync runner is present", "FUNCTIONAL");
+assert(adminHtmlContent.includes('toggle-linkedin-sync-btn'), "Admin Panel LinkedIn Auto-Sync ON/OFF toggle is present", "FUNCTIONAL");
+assert(adminHtmlContent.includes('linkedin-import-form'), "Admin Panel Smart LinkedIn Certificate Importer is present", "FUNCTIONAL");
 
 console.log("\n===============================================================================");
 console.log(` AUDIT SUMMARY: Total: ${totalTests} | Passed: ${passedTests} | Failed: ${failedTests}`);
